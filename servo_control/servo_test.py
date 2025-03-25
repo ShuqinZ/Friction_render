@@ -1,14 +1,15 @@
 from gpiozero import Servo
-from gpiozero.pins.pigpio import PiGPIOFactory
+from gpiozero.pins.lgpio import LGPIOFactory
 from time import sleep
 import signal
 import sys
 
 # Use lgpio backend explicitly
-factory = PiGPIOFactory()
+factory = LGPIOFactory()
 
 # Set up the servo
-servo = Servo(14, pin_factory=factory)
+servo = Servo(15, pin_factory=factory)
+
 # Graceful exit on Ctrl+C or script exit
 def cleanup(signum=None, frame=None):
     print("Cleaning up...")
@@ -24,12 +25,12 @@ signal.signal(signal.SIGTERM, cleanup)
 # Example: sweep servo back and forth
 try:
     while True:
-        for angle in range(-90, 91, 1):
-            servo.angle = angle
-            sleep(0.2)
-        for angle in range(90, -91, -1):
-            servo.angle = angle
-            sleep(0.2)
+        servo.min()
+        sleep(1)
+        servo.mid()
+        sleep(1)
+        servo.max()
+        sleep(1)
 
 except Exception as e:
     print("Error occurred:", e)
