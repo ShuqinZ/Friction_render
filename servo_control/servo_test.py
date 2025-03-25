@@ -6,7 +6,7 @@ from time import sleep
 
 # minimum pulse width, and maximum pulse width
 
-servo = AngularServo(14, min_pulse_width=0.0006, max_pulse_width=0.0023)
+servo = AngularServo(8, min_pulse_width=0.0006, max_pulse_width=0.0023)
 
 try:
 
