@@ -1,36 +1,21 @@
 from gpiozero import AngularServo
-
+from gpiozero import Device
+from gpiozero.pins.lgpio import LGPIOFactory
 from time import sleep
 
-# Create an AngularServo object with the specified GPIO pin,
+Device.pin_factory = LGPIOFactory()
 
-# minimum pulse width, and maximum pulse width
-
+# Set up servo on GPIO 17 (change if needed)
 servo = AngularServo(17, min_pulse_width=0.0006, max_pulse_width=0.0023)
 
 try:
-
     while True:
-        # Set the servo angle to 90 degrees
-
-        servo.angle = 90
-
-        sleep(1)  # Delay for 1 second
-
-        # Set the servo angle to 0 degrees
-
-        servo.angle = 0
-
-        sleep(1)  # Delay for 1 second
-
-        # Set the servo angle to -90 degrees
-
-        servo.angle = -90
-
-        sleep(1)  # Delay for 1 second
+        for angle in range(-90, 91, 10):  # Sweep from -90 to 90
+            servo.angle = angle
+            sleep(0.05)
+        for angle in range(90, -91, -10):  # Sweep back
+            servo.angle = angle
+            sleep(0.05)
 
 finally:
-
-    # Set the servo angle to 0 degrees before exiting
-
     servo.angle = 0
