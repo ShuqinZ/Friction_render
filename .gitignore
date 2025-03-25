@@ -174,3 +174,4 @@ cython_debug/
 .pypirc
 
 tof_calibration/results/*
+.DS_Store
