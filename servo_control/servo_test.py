@@ -9,7 +9,7 @@ factory = LGPIOFactory()
 Device.pin_factory = factory
 
 # Set up the servo
-servo = AngularServo(17, min_pulse_width=0.0006, max_pulse_width=0.0023)
+servo = AngularServo(15, min_pulse_width=0.0006, max_pulse_width=0.0023)
 
 # Graceful exit on Ctrl+C or script exit
 def cleanup(signum=None, frame=None):
