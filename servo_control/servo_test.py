@@ -1,3 +1,5 @@
+import math
+
 from gpiozero import Servo
 from gpiozero.pins.lgpio import LGPIOFactory
 from time import sleep
@@ -8,7 +10,7 @@ import sys
 factory = LGPIOFactory()
 
 # Set up the servo
-servo = Servo(15, pin_factory=factory)
+servo = Servo(15, pin_factory=factory, min_pulse_width=0.5/1000, max_pulse_width=2.5/1000)
 
 # Graceful exit on Ctrl+C or script exit
 def cleanup(signum=None, frame=None):
@@ -25,12 +27,9 @@ signal.signal(signal.SIGTERM, cleanup)
 # Example: sweep servo back and forth
 try:
     while True:
-        servo.min()
-        sleep(1)
-        servo.mid()
-        sleep(1)
-        servo.max()
-        sleep(1)
+        for i in range(0, 360):
+            servo.value = math.sin(math.radians(i))
+            sleep(0.01)
 
 except Exception as e:
     print("Error occurred:", e)
