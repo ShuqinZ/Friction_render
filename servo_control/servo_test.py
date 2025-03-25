@@ -28,7 +28,8 @@ try:
     while True:
         for angle in range(-90, 91, 1):
             servo.angle = angle
-            # sleep(0.05)
+
+        sleep(0.5)
         for angle in range(90, -91, -1):
             servo.angle = angle
 
