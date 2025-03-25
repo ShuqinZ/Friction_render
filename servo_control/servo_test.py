@@ -10,7 +10,7 @@ import sys
 factory = LGPIOFactory()
 
 # Set up the servo
-servo = Servo(15, pin_factory=factory, min_pulse_width=0.5/1000, max_pulse_width=2.7/1000)
+servo = Servo(15, pin_factory=factory, min_pulse_width=0.3/1000, max_pulse_width=2.7/1000)
 
 # Graceful exit on Ctrl+C or script exit
 def cleanup(signum=None, frame=None):
