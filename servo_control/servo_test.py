@@ -1,16 +1,14 @@
-from gpiozero import AngularServo, Device
-from gpiozero.pins.lgpio import LGPIOFactory
+from gpiozero import Servo
+from gpiozero.pins.pigpio import PiGPIOFactory
 from time import sleep
 import signal
 import sys
 
 # Use lgpio backend explicitly
-factory = LGPIOFactory()
-Device.pin_factory = factory
+factory = PiGPIOFactory()
 
 # Set up the servo
-servo = AngularServo(15, min_pulse_width=0.0006, max_pulse_width=0.0023)
-
+servo = Servo(14, pin_factory=factory)
 # Graceful exit on Ctrl+C or script exit
 def cleanup(signum=None, frame=None):
     print("Cleaning up...")
