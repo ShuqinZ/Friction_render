@@ -27,9 +27,9 @@ signal.signal(signal.SIGTERM, cleanup)
 try:
     while True:
         servo.angle = -90
-        sleep(0.1)
+        sleep(0.5)
         servo.angle = 90
-        sleep(0.1)
+        sleep(0.5)
 
 except Exception as e:
     print("Error occurred:", e)
