@@ -26,10 +26,10 @@ signal.signal(signal.SIGTERM, cleanup)
 # Example: sweep servo back and forth
 try:
     while True:
-        for angle in range(-90, 91, 10):
+        for angle in range(0, 180):
             servo.angle = angle
-            sleep(0.05)
-        for angle in range(90, -91, -10):
+            # sleep(0.05)
+        for angle in range(180, 0, -1):
             servo.angle = angle
             sleep(0.05)
 
