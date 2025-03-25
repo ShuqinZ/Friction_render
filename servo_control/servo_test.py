@@ -28,10 +28,10 @@ try:
     while True:
         for angle in range(-90, 91, 1):
             servo.angle = angle
-
-        sleep(0.5)
+            sleep(0.02)
         for angle in range(90, -91, -1):
             servo.angle = angle
+            sleep(0.02)
 
 except Exception as e:
     print("Error occurred:", e)
