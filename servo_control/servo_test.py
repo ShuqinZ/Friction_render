@@ -7,10 +7,11 @@ import signal
 import sys
 
 # Use lgpio backend explicitly
-factory = LGPIOFactory()
+# factory = LGPIOFactory()
 
 # Set up the servo
-servo = Servo(18, pin_factory=factory, min_pulse_width=0.5/1000, max_pulse_width=2.5/1000)
+servo = Servo(18, min_pulse_width=0.5/1000, max_pulse_width=2.5/1000)
+# servo = Servo(18, pin_factory=factory, min_pulse_width=0.5/1000, max_pulse_width=2.5/1000)
 
 # Graceful exit on Ctrl+C or script exit
 def cleanup(signum=None, frame=None):
@@ -29,7 +30,7 @@ try:
     while True:
         for i in range(0, 360):
             servo.value = math.sin(math.radians(i))
-            sleep(0.2)
+            sleep(0.01)
 
 except Exception as e:
     print("Error occurred:", e)
