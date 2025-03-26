@@ -1,17 +1,16 @@
 import math
 
 from gpiozero import Servo
-from gpiozero.pins.lgpio import LGPIOFactory
+from gpiozero.pins.pigpio import PiGPIOFactory
 from time import sleep
 import signal
 import sys
 
 # Use lgpio backend explicitly
-# factory = LGPIOFactory()
+factory = PiGPIOFactory()
 
 # Set up the servo
-servo = Servo(18, min_pulse_width=0.5/1000, max_pulse_width=2.5/1000)
-# servo = Servo(18, pin_factory=factory, min_pulse_width=0.5/1000, max_pulse_width=2.5/1000)
+servo = Servo(18, pin_factory=factory, min_pulse_width=0.5/1000, max_pulse_width=2.5/1000)
 
 # Graceful exit on Ctrl+C or script exit
 def cleanup(signum=None, frame=None):
