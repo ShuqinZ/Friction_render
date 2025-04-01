@@ -1,7 +1,7 @@
 import math
 
 from gpiozero import Servo
-from gpiozero.pins.pigpio import LGPIOFactory
+from gpiozero.pins.lgpio import LGPIOFactory
 from time import sleep
 import signal
 import sys
