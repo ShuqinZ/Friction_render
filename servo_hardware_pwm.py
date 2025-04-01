@@ -1,17 +1,29 @@
-from time import sleep
+from pi5RC import pi5RC
+import time
 
-from utils.pi5RC import pi5RC
+# Create servo instance on GPIO18
+servo = pi5RC(18)
 
-servo = pi5RC(18)  # GPIO18 is PWM-capable on Pi 5
-
-# Sweep servo slowly
 try:
-    while True:
-        for pulse in range(500, 2500, 100):  # microseconds
-            servo.set(pulse)
-            sleep(0.02)
-        for pulse in range(2500, 500, -100):
-            servo.set(pulse)
-            sleep(0.02)
+    print("Centering servo...")
+    servo.set(1500)  # center
+    time.sleep(1)
+
+    print("Sweeping servo from 0° to 180°...")
+    for pulse in range(1000, 2000 + 1, 10):  # sweep right
+        servo.set(pulse)
+        time.sleep(0.01)
+
+    print("Sweeping servo back from 180° to 0°...")
+    for pulse in range(2000, 1000 - 1, -10):  # sweep left
+        servo.set(pulse)
+        time.sleep(0.01)
+
+    print("Returning to center...")
+    servo.set(1500)
+    time.sleep(1)
+
 except KeyboardInterrupt:
-    del servo
+    print("Stopped by user.")
+finally:
+    del servo  # clean up PWM and pin state
