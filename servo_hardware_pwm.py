@@ -1,5 +1,7 @@
-from pi5RC import pi5RC
+
 import time
+
+from utils.pi5RC import pi5RC
 
 # Create servo instance on GPIO18
 servo = pi5RC(18)
