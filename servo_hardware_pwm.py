@@ -1,5 +1,6 @@
-from utils.pi5RC import pi5RC
 from time import sleep
+
+from utils.pi5RC import pi5RC
 
 servo = pi5RC(18)  # GPIO18 is PWM-capable on Pi 5
 
