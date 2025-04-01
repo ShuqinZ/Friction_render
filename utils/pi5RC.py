@@ -8,7 +8,7 @@ class pi5RC:
     def __init__(self, Pin):
         pins = [12, 13, 14, 15, 18, 19]
         afunc = ['a0', 'a0', 'a0', 'a0', 'a3', 'a3']
-        self.pwmx = [0, 1, 2, 3, 2, 3]
+        self.pwmx = [0, 1, -1, -1, 0, 1]
         self.enableFlag = False
         self.onTime_us = 0
         if Pin in pins:
