@@ -30,7 +30,7 @@ try:
         for i in range(0, 360):
             print(math.sin(math.radians(i)))
             servo.value = math.sin(math.radians(i))
-            # sleep(0.01)
+            sleep(0.02)
 
 except Exception as e:
     print("Error occurred:", e)
