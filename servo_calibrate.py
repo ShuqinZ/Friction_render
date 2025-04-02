@@ -17,6 +17,7 @@ servo = pi5RC(18)  # GPIO18 using pwmchip2/pwm2
 
 NUM_SAMPLES = 20
 
+
 def read_smoothed_position():
     vals = []
     for _ in range(NUM_SAMPLES):
@@ -26,6 +27,7 @@ def read_smoothed_position():
         time.sleep(0.005)
     return sum(vals) / len(vals)
 
+
 try:
     print("Measuring initial position...")
     servo.set(500)  # ~0°
@@ -34,12 +36,12 @@ try:
     print(f"Position at 0°: {pos_start:.3f} mm")
 
     print("Moving to 60°...")
-    angle = 60
+    angle = 50
     pulse_width = int((angle / 180.0) * (2400 - 500) + 500)
     servo.set(pulse_width)
     time.sleep(2.0)
     pos_end = read_smoothed_position()
-    print(f"Position at 60°: {pos_end:.3f} mm")
+    print(f"Position at 50°: {pos_end:.3f} mm")
 
     distance_change = pos_end - pos_start
     angle_change = angle
