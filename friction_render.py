@@ -9,13 +9,11 @@ from utils.pi5RC import pi5RC
 
 # === Hardware Setup ===
 i2c = busio.I2C(board.SCL, board.SDA)
-# Create an ADS1115 object
 ads = ADS.ADS1115(i2c)
 pot = AnalogIn(ads, ADS.P0)
 servo = pi5RC(18)  # GPIO18 with working PWM2 on pwmchip2
 
 # === Constants ===
-NUM_SAMPLES = 10
 angle_to_distance = -2.08  # mm per degree
 angularSpeed = 0.6  # degrees/ms
 gear_diameter = 22.0  # mm
@@ -24,11 +22,10 @@ dynamicFriction = 0.4
 delta_v = 0.2  # mm/s
 initTime = 1.0  # seconds
 Kp, Ki, Kd = 1, 0, 0.2
+alpha = 0.1  # smoothing factor for low-pass filter
 
 # === State Variables ===
-posBuffer = [0.0] * NUM_SAMPLES
-posIndex = 0
-lastSmoothedPosition = 0
+lastSmoothedPosition = None  # to be initialized with first reading
 integral = 0
 previous_error = 0
 servoBaseAngle = 0
@@ -36,8 +33,9 @@ detectedForce = 0
 calibrated = False
 sliding = False
 targetPosition = 0
+
 servo.set(0)
-time.sleep(1)  # 10ms loop (100Hz)
+time.sleep(1)
 
 start_time = time.time()
 last_time = start_time
@@ -51,9 +49,11 @@ try:
         # === Read and smooth position ===
         raw_val = pot.value  # 0–32767
         position = ((raw_val / 32767.0) * 10.5) / 1.01 + 1
-        posBuffer[posIndex] = position
-        posIndex = (posIndex + 1) % NUM_SAMPLES
-        smoothedPosition = sum(posBuffer) / NUM_SAMPLES
+
+        if lastSmoothedPosition is None:
+            smoothedPosition = position
+        else:
+            smoothedPosition = alpha * position + (1 - alpha) * lastSmoothedPosition
 
         # === Initialization Phase ===
         if now - start_time < initTime:
@@ -85,7 +85,6 @@ try:
                 sliding = True
 
             frictionForce = dynamicFriction if sliding else maxStaticFriction
-
             targetPosition = frictionForce / 0.16
 
         # === PID ===
@@ -102,13 +101,10 @@ try:
         motorVelocity = np.clip(motorVelocity, -angularSpeed * dt, angularSpeed * dt)
         external_velocity = velocity - motorVelocity * angle_to_distance
 
-        # Only move servo if movement is needed
-        # if abs(external_velocity) > delta_v:
         servo.set(controlAngle)
 
         previous_error = error
 
-        # === Logging ===
         print(f"{error:.2f}, {controlSignal:.2f}, {controlAngle:.2f}, {targetPosition:.2f}, {smoothedPosition:.2f}, {velocity:.3f}, {motorVelocity:.3f},{external_velocity:.3f}, {frictionForce:.2f}, {detectedForce:.2f}, {100 * (detectedForce - frictionForce)/frictionForce if frictionForce > 0 else 0:.2f}%")
 
         lastSmoothedPosition = smoothedPosition
