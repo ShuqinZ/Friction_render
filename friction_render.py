@@ -16,7 +16,7 @@ servo = pi5RC(18)  # GPIO18 with working PWM2 on pwmchip2
 
 # === Constants ===
 NUM_SAMPLES = 10
-angle_to_distance = 0.0556  # mm per degree
+angle_to_distance = -2.08  # mm per degree
 angularSpeed = 0.6  # degrees/ms
 gear_diameter = 22.0  # mm
 maxStaticFriction = 0.8
@@ -110,7 +110,7 @@ try:
         previous_error = error
 
         # === Logging ===
-        print(f"{error:.2f}, {controlAngle:.2f}, {targetPosition:.2f}, {smoothedPosition:.2f}, {external_velocity:.3f}, {frictionForce:.2f}")
+        print(f"{error:.2f}, {controlAngle:.2f}, {targetPosition:.2f}, {smoothedPosition:.2f}, {velocity:.3f}, {motorVelocity:.3f},{external_velocity:.3f}, {frictionForce:.2f}")
 
         time.sleep(0.01)  # 10ms loop (100Hz)
 
