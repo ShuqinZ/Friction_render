@@ -35,8 +35,9 @@ servoBaseAngle = 0
 calibrated = False
 sliding = False
 targetPosition = 0
-
 servo.set(0)
+time.sleep(1)  # 10ms loop (100Hz)
+
 start_time = time.time()
 last_time = start_time
 
