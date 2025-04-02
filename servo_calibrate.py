@@ -17,7 +17,7 @@ servo = pi5RC(18)  # GPIO18 using pwmchip2/pwm2
 
 NUM_SAMPLES = 20
 
-calibrate_angle = [20, 50]
+calibrate_angle = [15, 50]
 
 
 def read_smoothed_position():
