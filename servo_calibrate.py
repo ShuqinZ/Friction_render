@@ -51,7 +51,7 @@ try:
     print("\n=== Calibration Result ===")
     print(f"Potentiometer distance change: {distance_change:.3f} mm")
     print(f"Servo angle change: {angle_change}°")
-    print(f"\033[92mEstimated angle_to_distance: {angle_to_distance:.5f} mm/deg\033[0m")
+    print(f"Estimated angle_to_distance: {angle_to_distance:.5f} mm/deg")
 
 except KeyboardInterrupt:
     print("Aborted by user.")
