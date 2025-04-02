@@ -36,6 +36,7 @@ calibrated = False
 sliding = False
 targetPosition = 0
 
+servo.set(0)
 start_time = time.time()
 last_time = start_time
 
