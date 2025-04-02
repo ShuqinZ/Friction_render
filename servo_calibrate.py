@@ -2,15 +2,17 @@ import time
 import board
 import busio
 import numpy as np
-from adafruit_ads1x15.ads1115 import ADS1115
+import adafruit_ads1x15.ads1115 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn
 
 from utils.pi5RC import pi5RC
 
 # === Setup ===
 i2c = busio.I2C(board.SCL, board.SDA)
-ads = ADS1115(i2c)
-pot = AnalogIn(ads, ADS1115.P0)
+
+# Create an ADS1115 object
+ads = ADS.ADS1115(i2c)
+pot = AnalogIn(ads, ADS.P0)
 servo = pi5RC(18)  # GPIO18 using pwmchip2/pwm2
 
 NUM_SAMPLES = 20
