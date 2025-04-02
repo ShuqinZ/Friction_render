@@ -23,7 +23,7 @@ maxStaticFriction = 0.8
 dynamicFriction = 0.4
 delta_v = 0.2  # mm/s
 initTime = 1.0  # seconds
-Kp, Ki, Kd = 0.6, 0.5, 0.5
+Kp, Ki, Kd = 0.6, 0, 0
 
 # === State Variables ===
 posBuffer = [0.0] * NUM_SAMPLES
