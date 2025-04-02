@@ -92,7 +92,7 @@ try:
         error = targetPosition - smoothedPosition
         integral += error * dt
         derivative = (error - previous_error) / dt if dt > 0 else 0
-        controlSignal = Kp * error + Ki * integral + Kd * derivative
+        controlSignal = -(Kp * error + Ki * integral + Kd * derivative)
         controlAngle = np.clip(servoBaseAngle + controlSignal, 0, 180)
         angle_change = controlAngle - servoBaseAngle
         servoBaseAngle = controlAngle
@@ -102,8 +102,8 @@ try:
         external_velocity = velocity - motorVelocity * angle_to_distance
 
         # Only move servo if movement is needed
-        if abs(external_velocity) > delta_v:
-            servo.set(controlAngle)
+        # if abs(external_velocity) > delta_v:
+        servo.set(controlAngle)
 
         previous_error = error
 
