@@ -23,7 +23,7 @@ maxStaticFriction = 0.8
 dynamicFriction = 0.4
 delta_v = 0.2  # mm/s
 initTime = 1.0  # seconds
-Kp, Ki, Kd = 1, 0.2, 0.2
+Kp, Ki, Kd = 1, 0.2, 0.1
 
 # === State Variables ===
 posBuffer = [0.0] * NUM_SAMPLES
@@ -88,7 +88,6 @@ try:
             targetPosition = frictionForce / 0.16
 
         # === PID ===
-
         velocity = (smoothedPosition - lastSmoothedPosition) / dt
         error = targetPosition - smoothedPosition
         integral += error * dt
