@@ -57,6 +57,7 @@ try:
         # === Initialization Phase ===
         if now - start_time < initTime:
             targetPosition = smoothedPosition
+            lastSmoothedPosition = smoothedPosition
             continue
 
         # === Calibration ===
