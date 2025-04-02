@@ -74,14 +74,9 @@ try:
             elif smoothedPosition <= (maxStaticFriction / 0.16 + 0.01):
                 calibrated = True
                 integral = 0
-            velocity = (smoothedPosition - lastSmoothedPosition) / dt
-            lastSmoothedPosition = smoothedPosition
 
         else:
             # === Control ===
-            velocity = (smoothedPosition - lastSmoothedPosition) / dt
-            lastSmoothedPosition = smoothedPosition
-
             detectedForce = smoothedPosition * 0.16
             if not sliding and detectedForce > maxStaticFriction * 1.2:
                 sliding = True
@@ -91,6 +86,8 @@ try:
             targetPosition = frictionForce / 0.16
 
         # === PID ===
+
+        velocity = (smoothedPosition - lastSmoothedPosition) / dt
         error = targetPosition - smoothedPosition
         integral += error * dt
         derivative = (error - previous_error) / dt if dt > 0 else 0
@@ -112,6 +109,7 @@ try:
         # === Logging ===
         print(f"{error:.2f}, {controlAngle:.2f}, {targetPosition:.2f}, {smoothedPosition:.2f}, {velocity:.3f}, {motorVelocity:.3f},{external_velocity:.3f}, {frictionForce:.2f}")
 
+        lastSmoothedPosition = smoothedPosition
         time.sleep(0.01)  # 10ms loop (100Hz)
 
 except KeyboardInterrupt:
