@@ -17,6 +17,8 @@ servo = pi5RC(18)  # GPIO18 using pwmchip2/pwm2
 
 NUM_SAMPLES = 20
 
+calibrate_angle = [10, 50]
+
 
 def read_smoothed_position():
     vals = []
@@ -30,20 +32,20 @@ def read_smoothed_position():
 
 try:
     print("Measuring initial position...")
-    servo.set(0)  # ~0°
+    servo.set(calibrate_angle[0])
     time.sleep(1.5)
     pos_start = read_smoothed_position()
-    print(f"Position at 0°: {pos_start:.3f} mm")
+    print(f"Position at {calibrate_angle[0]}°: {pos_start:.3f} mm")
 
-    print("Moving to 50°...")
-    angle = 50
+    print(f"Moving to {calibrate_angle[1]}°...")
+    angle = calibrate_angle[1]
     servo.set(angle)
     time.sleep(2.0)
     pos_end = read_smoothed_position()
-    print(f"Position at 50°: {pos_end:.3f} mm")
+    print(f"Position at {calibrate_angle[1]}°: {pos_end:.3f} mm")
 
     distance_change = pos_end - pos_start
-    angle_change = angle
+    angle_change = calibrate_angle[1] - calibrate_angle[0]
     angle_to_distance = distance_change / angle_change
 
     print("\n=== Calibration Result ===")
