@@ -4,51 +4,72 @@ import time
 
 
 class pi5RC:
-
     def __init__(self, Pin):
+        # Define supported GPIO pins and their mappings
         pins = [12, 13, 14, 15, 18, 19]
         afunc = ['a0', 'a0', 'a0', 'a0', 'a3', 'a3']
-        self.pwmx = [0, 1, -1, -1, 0, 1]
-        self.enableFlag = False
-        self.onTime_us = 0
-        if Pin in pins:
-            self.pin = Pin
-            self.pinIdx = pins.index(Pin)
-            # let's set pin ctrl
-            os.system("/usr/bin/pinctrl set {} {}".format(self.pin, afunc[self.pinIdx]))
-            # let export pin
-            if not os.path.exists("/sys/class/pwm/pwmchip0/pwm{}".format(self.pwmx[self.pinIdx])):
-                os.system("echo {} > /sys/class/pwm/pwmchip0/export".format(self.pwmx[self.pinIdx]))
-            # CLOCK AT 1gHZ  let put period to 20ms
-            time.sleep(0.2)
-            os.system("echo 20000000 > /sys/class/pwm/pwmchip0/pwm{}/period".format(self.pwmx[self.pinIdx]))
-            time.sleep(0.1)
-            self.enable(False)
-            self.file_duty = open("/sys/class/pwm/pwmchip0/pwm{}/duty_cycle".format(self.pwmx[self.pinIdx]), "w")
-            if self.file_duty.closed:
-                raise IOError("Unable to create pwm{} file".format(self.pwmx[self.pinIdx]))
-        else:
-            self.pin = None
-            raise IOError("Error Invalid PWM  Pin {}".format(Pin))
+        pwmchip_map = [0, 2, -1, -1, 2, 2]  # GPIO18 (pwmchip2/pwm2), GPIO19 (pwmchip2/pwm1)
+        pwmchan_map = [0, 0, -1, -1, 2, 1]
 
-    def enable(self, flag):
+        if Pin not in pins:
+            raise ValueError(f"Unsupported PWM pin: GPIO{Pin}")
+
+        self.pin = Pin
+        self.pinIdx = pins.index(Pin)
+        self.pwmchip = pwmchip_map[self.pinIdx]
+        self.pwmchan = pwmchan_map[self.pinIdx]
+        self.enableFlag = False
+        self.file_duty = None
+        self.pwm_path = f"/sys/class/pwm/pwmchip{self.pwmchip}/pwm{self.pwmchan}"
+
+        # Set pin function
+        os.system(f"/usr/bin/pinctrl set {self.pin} {afunc[self.pinIdx]}")
+        time.sleep(0.1)
+
+        # Export if not already
+        if not os.path.exists(self.pwm_path):
+            try:
+                with open(f"/sys/class/pwm/pwmchip{self.pwmchip}/export", "w") as f:
+                    f.write(str(self.pwmchan))
+                time.sleep(0.2)
+            except OSError as e:
+                if "Device or resource busy" not in str(e):
+                    raise e
+
+        # Set 20ms period (50Hz servo signal)
+        self._write(f"{self.pwm_path}/period", "20000000")
+        self.enable(False)
+        self.file_duty = open(f"{self.pwm_path}/duty_cycle", "w")
+
+    def enable(self, flag: bool):
         self.enableFlag = flag
-        os.system("echo {} > /sys/class/pwm/pwmchip0/pwm{}/enable".format(
-            int(self.enableFlag), self.pwmx[self.pinIdx]))
+        self._write(f"{self.pwm_path}/enable", "1" if flag else "0")
+
+    def set(self, onTime_us: int):
+        """Set pulse width in microseconds (e.g., 1500 for center)"""
+        if not self.enableFlag:
+            self.enable(True)
+        self.onTime_us = onTime_us
+        self.file_duty.seek(0)
+        self.file_duty.write(str(onTime_us * 1000))  # Convert µs to ns
+        self.file_duty.flush()
+
+    def _write(self, path, value):
+        try:
+            with open(path, "w") as f:
+                f.write(value)
+        except Exception as e:
+            print(f"Failed to write to {path}: {e}")
+            raise
 
     def __del__(self):
-        if self.pin is not None:
-            # ok take PWM out
-            os.system("echo {} > /sys/class/pwm/pwmchip0/unexport".format(self.pwmx[self.pinIdx]))
-            # disable PWM Pin
-            os.system("/usr/bin/pinctrl set {} no".format(self.pin))
-            if not self.file_duty.closed:
+        try:
+            if self.file_duty and not self.file_duty.closed:
                 self.file_duty.close()
-
-    def set(self, onTime_us):
-        if self.pin is not None:
-            if not self.enableFlag:
-                self.enable(True)
-            self.onTime_us = onTime_us
-            self.file_duty.write("{}".format(onTime_us * 1000))
-            self.file_duty.flush()
+            self.enable(False)
+            if os.path.exists(f"/sys/class/pwm/pwmchip{self.pwmchip}/unexport"):
+                with open(f"/sys/class/pwm/pwmchip{self.pwmchip}/unexport", "w") as f:
+                    f.write(str(self.pwmchan))
+            os.system(f"/usr/bin/pinctrl set {self.pin} no")
+        except Exception as e:
+            print(f"Cleanup failed: {e}")
