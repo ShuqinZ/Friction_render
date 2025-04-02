@@ -49,7 +49,7 @@ try:
 
         # === Read and smooth position ===
         raw_val = pot.value  # 0–32767
-        position = ((raw_val / 32767.0) * 10.5) / 1.01 + 1
+        position = (((32767 - raw_val) / 32767.0) * 10.5) / 1.01 + 1
         posBuffer[posIndex] = position
         posIndex = (posIndex + 1) % NUM_SAMPLES
         smoothedPosition = sum(posBuffer) / NUM_SAMPLES
