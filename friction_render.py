@@ -4,7 +4,8 @@ import busio
 import numpy as np
 from adafruit_ads1x15.ads1115 import ADS1115
 from adafruit_ads1x15.analog_in import AnalogIn
-from pi5RC import pi5RC  # your fixed class
+
+from utils.pi5RC import pi5RC
 
 # === Hardware Setup ===
 i2c = busio.I2C(board.SCL, board.SDA)
