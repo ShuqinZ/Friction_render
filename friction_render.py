@@ -21,7 +21,7 @@ angularSpeed = 0.6  # degrees/ms
 gear_diameter = 22.0  # mm
 maxStaticFriction = 0.8
 dynamicFriction = 0.4
-delta_v = 0.5  # mm/s
+delta_v = 0.2  # mm/s
 initTime = 1.0  # seconds
 Kp, Ki, Kd = 1.5, 0.05, 2
 
@@ -86,30 +86,30 @@ try:
                 sliding = True
 
             frictionForce = dynamicFriction if sliding else maxStaticFriction
-            targetPosition = frictionForce / 0.16
 
-            # === PID ===
-            error = targetPosition - smoothedPosition
-            integral += error * dt
-            derivative = (error - previous_error) / dt if dt > 0 else 0
-            controlSignal = Kp * error + Ki * integral + Kd * derivative
-            controlAngle = np.clip(servoBaseAngle + controlSignal, 0, 180)
-            angle_change = controlAngle - servoBaseAngle
-            servoBaseAngle = controlAngle
+        targetPosition = frictionForce / 0.16
 
-            motorVelocity = angle_change / dt if dt > 0 else 0
-            motorVelocity = np.clip(motorVelocity, -angularSpeed * dt, angularSpeed * dt)
-            external_velocity = velocity - motorVelocity * angle_to_distance
+        # === PID ===
+        error = targetPosition - smoothedPosition
+        integral += error * dt
+        derivative = (error - previous_error) / dt if dt > 0 else 0
+        controlSignal = Kp * error + Ki * integral + Kd * derivative
+        controlAngle = np.clip(servoBaseAngle + controlSignal, 0, 180)
+        angle_change = controlAngle - servoBaseAngle
+        servoBaseAngle = controlAngle
 
-            # Only move servo if movement is needed
-            if abs(external_velocity) > 0.2:
-                servo.set(controlAngle)
+        motorVelocity = angle_change / dt if dt > 0 else 0
+        motorVelocity = np.clip(motorVelocity, -angularSpeed * dt, angularSpeed * dt)
+        external_velocity = velocity - motorVelocity * angle_to_distance
 
-            previous_error = error
+        # Only move servo if movement is needed
+        if abs(external_velocity) > delta_v:
+            servo.set(controlAngle)
 
-            # === Logging ===
-            print(f"{error:.3f}, {integral:.3f}, {derivative:.3f}, {controlAngle:.2f}, "
-                  f"{targetPosition:.2f}, {smoothedPosition:.2f}, {velocity:.3f}, {frictionForce:.2f}")
+        previous_error = error
+
+        # === Logging ===
+        print(f"{error:.2f}, {controlAngle:.2f}, {targetPosition:.2f}, {smoothedPosition:.2f}, {external_velocity:.3f}, {frictionForce:.2f}")
 
         time.sleep(0.01)  # 10ms loop (100Hz)
 
