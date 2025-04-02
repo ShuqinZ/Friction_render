@@ -30,15 +30,14 @@ def read_smoothed_position():
 
 try:
     print("Measuring initial position...")
-    servo.set(500)  # ~0°
+    servo.set(0)  # ~0°
     time.sleep(1.5)
     pos_start = read_smoothed_position()
     print(f"Position at 0°: {pos_start:.3f} mm")
 
-    print("Moving to 60°...")
+    print("Moving to 50°...")
     angle = 50
-    pulse_width = int((angle / 180.0) * (2400 - 500) + 500)
-    servo.set(pulse_width)
+    servo.set(angle)
     time.sleep(2.0)
     pos_end = read_smoothed_position()
     print(f"Position at 50°: {pos_end:.3f} mm")

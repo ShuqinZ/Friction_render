@@ -100,8 +100,7 @@ try:
 
             # Only move servo if movement is needed
             if abs(external_velocity) > 0.2:
-                pulse_width = int(np.clip((controlAngle / 180) * (2400 - 500) + 500, 500, 2400))
-                servo.set(pulse_width)
+                servo.set(controlAngle)
 
             previous_error = error
 

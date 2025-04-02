@@ -45,7 +45,11 @@ class pi5RC:
         self.enableFlag = flag
         self._write(f"{self.pwm_path}/enable", "1" if flag else "0")
 
-    def set(self, onTime_us: int):
+    def set(self, angle: float, angle_range: float = 180.0, pulse_range: tuple = (2400, 500)):
+        pulse_width = pulse_range[1] - int((angle / angle_range) * (pulse_range[1] - pulse_range[0]))
+        self.set_pwm(pulse_width)
+
+    def set_pwm(self, onTime_us: int):
         """Set pulse width in microseconds (e.g., 1500 for center)"""
         if not self.enableFlag:
             self.enable(True)
