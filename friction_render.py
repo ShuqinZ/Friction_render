@@ -15,7 +15,7 @@ servo = pi5RC(18)  # GPIO18 with working PWM2 on pwmchip2
 
 # === Constants ===
 angle_to_distance = -2.08  # mm per degree
-angularSpeed = 0.6  # degrees/ms
+angularSpeed = 600  # degrees/s
 gear_diameter = 22.0  # mm
 maxStaticFriction = 0.8
 dynamicFriction = 0.4
