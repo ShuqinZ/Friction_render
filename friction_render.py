@@ -109,7 +109,7 @@ try:
         previous_error = error
 
         # === Logging ===
-        print(f"{error:.2f}, {controlAngle:.2f}, {targetPosition:.2f}, {smoothedPosition:.2f}, {velocity:.3f}, {motorVelocity:.3f},{external_velocity:.3f}, {frictionForce:.2f}, {detectedForce:.2f}")
+        print(f"{error:.2f}, {controlAngle:.2f}, {targetPosition:.2f}, {smoothedPosition:.2f}, {velocity:.3f}, {motorVelocity:.3f},{external_velocity:.3f}, {frictionForce:.2f}, {detectedForce:.2f}, {(detectedForce - frictionForce)/frictionForce}")
 
         lastSmoothedPosition = smoothedPosition
         time.sleep(0.05)  # 10ms loop (100Hz)
