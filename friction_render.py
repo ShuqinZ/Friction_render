@@ -98,8 +98,8 @@ try:
         servoBaseAngle = controlAngle
 
         motorVelocity = angle_change / dt if dt > 0 else 0
-        motorVelocity = np.clip(motorVelocity, -angularSpeed * dt, angularSpeed * dt)
-        external_velocity = velocity - motorVelocity * angle_to_distance
+        motorVelocity = np.clip(motorVelocity, -angularSpeed * dt, angularSpeed * dt) * angle_to_distance
+        external_velocity = velocity - motorVelocity
 
         servo.set(controlAngle)
 
