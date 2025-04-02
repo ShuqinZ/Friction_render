@@ -32,6 +32,7 @@ lastSmoothedPosition = 0
 integral = 0
 previous_error = 0
 servoBaseAngle = 0
+detectedForce = 0
 calibrated = False
 sliding = False
 targetPosition = 0
