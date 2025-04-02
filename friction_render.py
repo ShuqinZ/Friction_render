@@ -88,7 +88,7 @@ try:
 
             frictionForce = dynamicFriction if sliding else maxStaticFriction
 
-        targetPosition = frictionForce / 0.16
+            targetPosition = frictionForce / 0.16
 
         # === PID ===
         error = targetPosition - smoothedPosition
