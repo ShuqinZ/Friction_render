@@ -117,6 +117,9 @@ try:
             time.sleep(3)
             sliding = False
             calibrated = False
+            servo.set(0)
+            start_time = time.time()
+
 
         previous_error = error
 
