@@ -86,7 +86,8 @@ try:
 
         else:
             # === Control ===
-            if not sliding and smoothedPosition > (maxStaticFriction/spring_rate + pot_fluc) * 1.1:
+            detectedForce = smoothedPosition * spring_rate
+            if not sliding and smoothedPosition > (maxStaticFriction + spring_rate * pot_fluc) * 1.1:
                 sliding = True
 
             frictionForce = dynamicFriction if sliding else maxStaticFriction
@@ -112,7 +113,7 @@ try:
         last_angle_change = controlAngle - servoBaseAngle
         servoBaseAngle = controlAngle
         lastSmoothedPosition = smoothedPosition
-        time.sleep(0.02)  # 10ms loop (100Hz)
+        time.sleep(0.02 - (time.time() - last_time))  # 10ms loop (100Hz)
 
 except KeyboardInterrupt:
     print("\nExiting...")
