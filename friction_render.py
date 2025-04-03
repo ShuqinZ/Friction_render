@@ -109,6 +109,7 @@ try:
 
 
         external_velocity = velocity - motorVelocity
+        previous_error = error
 
         if calibrated and not sliding and external_velocity > 3 and smoothedPosition > (maxStaticFriction + spring_rate * pot_fluc) * 1.2:
             sliding = True
@@ -128,9 +129,6 @@ try:
             time.sleep(1)
             start_time = time.time()
             last_time = start_time
-
-
-        previous_error = error
 
         print(f"{error:.2f}, {controlSignal:.2f}, {controlAngle:.2f}, {targetPosition:.2f}, {smoothedPosition:.2f}, {velocity:.3f}, {motorVelocity:.3f},{external_velocity:.3f}, {frictionForce:.2f}, {detectedForce:.2f}, {100 * (detectedForce - frictionForce)/frictionForce if frictionForce > 0 else 0:.2f}%, {dt:.5f}")
         last_angle_change = controlAngle - servoBaseAngle
