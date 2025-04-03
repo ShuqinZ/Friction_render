@@ -101,7 +101,7 @@ try:
         controlSignal = -(Kp * error + Ki * integral + Kd * derivative)
         controlAngle = np.clip(servoBaseAngle + controlSignal, 0, 180)
 
-        if controlAngle - servoBaseAngle> 2.5:
+        if abs(controlAngle - servoBaseAngle) > 0.1:
             servo.set(controlAngle)
 
             motorVelocity = last_angle_change / dt
