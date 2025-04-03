@@ -106,8 +106,8 @@ try:
 
         external_velocity = velocity - motorVelocity
 
-        if not sliding and abs(external_velocity) > 15 and smoothedPosition > (maxStaticFriction + spring_rate * pot_fluc) * 1.2:
-            sliding = True
+        # if not sliding and abs(external_velocity) > 15 and smoothedPosition > (maxStaticFriction + spring_rate * pot_fluc) * 1.2:
+        #     sliding = True
 
         previous_error = error
 
