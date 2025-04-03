@@ -8,6 +8,7 @@ from adafruit_ads1x15.analog_in import AnalogIn
 
 import sys
 import os
+
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from utils.pi5RC import pi5RC
@@ -19,9 +20,9 @@ ads = ADS.ADS1115(i2c)
 pot = AnalogIn(ads, ADS.P0)
 servo = pi5RC(18)  # GPIO18 using pwmchip2/pwm2
 
-alpha=0.3
+alpha = 0.3
 
-step_sizes = [0.05, 0.1, 0.5, 1, 5, 10, 45]
+step_sizes = [0.05, 0.1, 0.5, 0.6, 0.7, 0.8, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 10, 45]
 start_angle = 15
 csv_filename = "servo_velocity_calibration.csv"
 
@@ -85,7 +86,8 @@ try:
 
         angle_to_distance = (pos2 - pos1) / (to_angle - from_angle)
 
-        print(f"Moved {distance_moved:.4f} mm in {duration:.4f} s, delay:{delay:.4f} s — angle_to_distance: {angle_to_distance:.5f} mm/deg, velocity: {velocity:.4f} mm/s")
+        print(
+            f"Moved {distance_moved:.4f} mm in {duration:.4f} s, delay:{delay:.4f} s — angle_to_distance: {angle_to_distance:.5f} mm/deg, velocity: {velocity:.4f} mm/s")
 
         results.append({
             "step_deg": step,
