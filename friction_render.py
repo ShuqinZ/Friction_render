@@ -106,7 +106,7 @@ try:
 
         external_velocity = velocity - motorVelocity
 
-        if calibrated and not sliding and external_velocity < -5 and smoothedPosition > (maxStaticFriction + spring_rate * pot_fluc) * 1.2:
+        if calibrated and not sliding and external_velocity < -7 and smoothedPosition > (maxStaticFriction + spring_rate * pot_fluc) * 1.2:
             sliding = True
 
         previous_error = error
