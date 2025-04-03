@@ -72,7 +72,7 @@ try:
                 pos2 = alpha * pos2 + (1 - alpha) * last_position
             if abs(pos2 - pos1) > pos1 + 0.001:  # close enough
                 move_time = time.time()
-            if abs(pos2 - pos1) > (step * angle_to_distance):  # close enough
+            if abs(pos2 - pos1) > abs(step * angle_to_distance):  # close enough
                 break
             last_position = pos2
             # time.sleep(0.01)
