@@ -10,8 +10,8 @@ import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-
 from utils.pi5RC import pi5RC
+from utils.tools import *
 
 # === Setup ===
 i2c = busio.I2C(board.SCL, board.SDA)
@@ -19,31 +19,22 @@ ads = ADS.ADS1115(i2c)
 pot = AnalogIn(ads, ADS.P0)
 servo = pi5RC(18)  # GPIO18 using pwmchip2/pwm2
 
-NUM_SAMPLES = 20
-read_delay = 0.005  # 5ms between samples
+alpha=0.3
+
 step_sizes = [0.05, 0.1, 0.5, 1, 5, 10, 45]
 start_angle = 15
 csv_filename = "servo_velocity_calibration.csv"
-
-def read_smoothed_position():
-    vals = []
-    for _ in range(NUM_SAMPLES):
-        raw = pot.value
-        pos = ((raw / 32767.0) * 10.5) / 1.01 + 1  # mm
-        vals.append(pos)
-        time.sleep(read_delay)
-    return sum(vals) / len(vals)
 
 # === Start test ===
 try:
     print("Measuring angle-to-distance scale...")
     servo.set(start_angle)
     time.sleep(1.5)
-    pos_start = read_smoothed_position()
+    pos_start = read_smoothed_position(pot)
 
     servo.set(60)
     time.sleep(2.0)
-    pos_end = read_smoothed_position()
+    pos_end = read_smoothed_position(pot)
 
     angle_to_distance = (pos_end - pos_start) / (60 - start_angle)
     print(f"angle_to_distance: {angle_to_distance:.5f} mm/deg")
@@ -66,19 +57,24 @@ try:
 
         servo.set(from_angle)
         time.sleep(1.5)
-        pos1 = read_smoothed_position()
+        pos1 = read_smoothed_position(pot)
 
         start_time = time.time()
         move_time = start_time
         servo.set(to_angle)
         # Wait briefly for movement to complete
         # time.sleep(0.1)  # start delay to ensure motion starts
+        last_position = None
         while True:
-            pos2 = read_smoothed_position()
-            if abs(pos2 - pos1) > pos1 + 0.005:  # close enough
+            pos2 = read_smoothed_position(pot)
+
+            if last_position is not None:
+                pos2 = alpha * pos2 + (1 - alpha) * last_position
+            if abs(pos2 - pos1) > pos1 + 0.001:  # close enough
                 move_time = time.time()
             if abs(pos2 - pos1) > (step * angle_to_distance):  # close enough
                 break
+            last_position = pos2
             # time.sleep(0.01)
         end_time = time.time()
 
@@ -87,7 +83,9 @@ try:
         distance_moved = pos2 - pos1
         velocity = distance_moved / duration if duration > 0 else 0
 
-        print(f"Moved {distance_moved:.4f} mm in {duration:.4f} s, delay:{delay:.4f} s — velocity: {velocity:.4f} mm/s")
+        angle_to_distance = (pos2 - pos1) / (to_angle - from_angle)
+
+        print(f"Moved {distance_moved:.4f} mm in {duration:.4f} s, delay:{delay:.4f} s — angle_to_distance: {angle_to_distance:.5f} mm/deg, velocity: {velocity:.4f} mm/s")
 
         results.append({
             "step_deg": step,
