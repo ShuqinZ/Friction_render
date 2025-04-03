@@ -101,12 +101,15 @@ try:
         controlSignal = -(Kp * error + Ki * integral + Kd * derivative)
         controlAngle = np.clip(servoBaseAngle + controlSignal, 0, 180)
 
-        motorVelocity = last_angle_change / dt
-        motorVelocity = np.clip(motorVelocity, -angularSpeed * dt, angularSpeed * dt) * angle_to_distance
+        if controlAngle - servoBaseAngle> 2.5:
+            servo.set(controlAngle)
+
+            motorVelocity = last_angle_change / dt
+            motorVelocity = np.clip(motorVelocity, -angularSpeed * dt, angularSpeed * dt) * angle_to_distance
+        else:
+            motorVelocity = 0
+
         external_velocity = velocity - motorVelocity
-
-        servo.set(controlAngle)
-
         previous_error = error
 
         print(f"{error:.2f}, {controlSignal:.2f}, {controlAngle:.2f}, {targetPosition:.2f}, {smoothedPosition:.2f}, {velocity:.3f}, {motorVelocity:.3f},{external_velocity:.3f}, {frictionForce:.2f}, {detectedForce:.2f}, {100 * (detectedForce - frictionForce)/frictionForce if frictionForce > 0 else 0:.2f}%, {dt:.5f}")
