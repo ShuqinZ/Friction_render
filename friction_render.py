@@ -118,6 +118,13 @@ try:
             sliding = False
             calibrated = False
             servo.set(0)
+            lastSmoothedPosition = None  # to be initialized with first reading
+            integral = 0
+            previous_error = 0
+            servoBaseAngle = 0
+            detectedForce = 0
+            targetPosition = 0
+            last_angle_change = 0
             start_time = time.time()
 
 
