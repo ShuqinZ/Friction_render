@@ -41,6 +41,7 @@ try:
         sliding = False
         targetPosition = 0
         last_angle_change = 0
+        pid_scale_factor = 1
 
         servo.set(0)
         time.sleep(1)
@@ -101,7 +102,7 @@ try:
             error = targetPosition - smoothedPosition
             integral += error * dt
             derivative = (error - previous_error) / dt if dt > 0 else 0
-            controlSignal = -(Kp * error + Ki * integral + Kd * derivative)
+            controlSignal = -(Kp * error + Ki * integral + Kd * derivative) * pid_scale_factor
             controlAngle = np.clip(servoBaseAngle + controlSignal, 0, 180)
 
             servo.set(controlAngle)
@@ -111,6 +112,8 @@ try:
 
             external_velocity = velocity - motorVelocity
             previous_error = error
+
+            pid_scale_factor = 1 + (external_velocity-3)/10 if external_velocity < -3 else 1
 
             if calibrated and not sliding and external_velocity > 3 and smoothedPosition > (maxStaticFriction + spring_rate * pot_fluc) * 1.2:
                 sliding = True
