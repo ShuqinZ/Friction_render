@@ -25,7 +25,7 @@ start_time = time.time()
 readings = []
 
 # Loop to read the analog input continuously
-while time.time() < start_time + 10:
+while time.time() < start_time + 20:
 
     pos = read_smoothed_position(pot)
     readings.append(pos)

@@ -27,6 +27,8 @@ initTime = 1.0  # seconds
 Kp, Ki, Kd = 1, 0, 0.2
 alpha = 0.3  # smoothing factor for low-pass filter
 
+pot_fluc = 0.012
+
 # === State Variables ===
 lastSmoothedPosition = None  # to be initialized with first reading
 integral = 0
@@ -85,7 +87,7 @@ try:
         else:
             # === Control ===
             detectedForce = smoothedPosition * spring_rate
-            if not sliding and detectedForce > maxStaticFriction * 1.2:
+            if not sliding and detectedForce > maxStaticFriction + spring_rate * pot_fluc:
                 sliding = True
 
             frictionForce = dynamicFriction if sliding else maxStaticFriction

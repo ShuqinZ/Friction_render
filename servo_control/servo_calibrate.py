@@ -1,9 +1,13 @@
+import os
+import sys
 import time
 import board
 import busio
 import numpy as np
 import adafruit_ads1x15.ads1115 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn
+
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 from utils.pi5RC import pi5RC
 
