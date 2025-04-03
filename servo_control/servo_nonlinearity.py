@@ -71,9 +71,9 @@ try:
 
             if last_position is not None:
                 pos2 = alpha * pos2 + (1 - alpha) * last_position
-            if abs(pos2 - pos1) > pos1 + 0.001:  # close enough
+            if abs(pos2 - pos1) > pos1 + 0.002:  # close enough
                 move_time = time.time()
-            if last_position is not None and abs(pos2 - last_position) < 0.001:  # close enough
+            if last_position is not None and abs(pos2 - last_position) < 0.002:  # close enough
                 break
             last_position = pos2
             print(f"{pos2}, ")
