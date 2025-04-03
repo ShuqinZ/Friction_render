@@ -125,9 +125,9 @@ try:
             detectedForce = 0
             targetPosition = 0
             last_angle_change = 0
+            time.sleep(1)
             start_time = time.time()
             last_time = start_time
-            time.sleep(1)
 
 
         previous_error = error
