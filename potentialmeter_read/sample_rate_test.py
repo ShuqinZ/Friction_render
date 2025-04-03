@@ -20,7 +20,7 @@ start_time = time.time()
 duration = 5  # seconds
 
 while time.time() - start_time < duration:
-    _ = channel.value  # just read it, don't print
+    _ = channel.value  # just read it
     num_samples += 1
 
 elapsed_time = time.time() - start_time
