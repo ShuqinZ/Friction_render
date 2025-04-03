@@ -18,12 +18,14 @@ servo = pi5RC(18)  # GPIO18 with working PWM2 on pwmchip2
 angle_to_distance = -0.21  # mm per degree
 angularSpeed = 600  # degrees/s
 gear_diameter = 22.0  # mm
+spring_rate = 0.16
+
 maxStaticFriction = 0.8
 dynamicFriction = 0.4
 delta_v = 0.2  # mm/s
 initTime = 1.0  # seconds
 Kp, Ki, Kd = 1, 0, 0.2
-alpha = 0.1  # smoothing factor for low-pass filter
+alpha = 0.3  # smoothing factor for low-pass filter
 
 # === State Variables ===
 lastSmoothedPosition = None  # to be initialized with first reading
@@ -67,26 +69,26 @@ try:
         if not calibrated:
             print("Calibrating...", end=" ")
             frictionForce = 0
-            if smoothedPosition > (maxStaticFriction / 0.16 + 4):
+            if smoothedPosition > (maxStaticFriction / spring_rate + 4):
                 targetPosition = smoothedPosition - 1
-            elif smoothedPosition > (maxStaticFriction / 0.16 + 1):
+            elif smoothedPosition > (maxStaticFriction / spring_rate + 1):
                 targetPosition = smoothedPosition - 0.2
-            elif smoothedPosition > (maxStaticFriction / 0.16 + 0.1):
+            elif smoothedPosition > (maxStaticFriction / spring_rate + 0.1):
                 targetPosition = smoothedPosition - 0.1
-            elif smoothedPosition > (maxStaticFriction / 0.16 + 0.02):
+            elif smoothedPosition > (maxStaticFriction / spring_rate + 0.02):
                 targetPosition = smoothedPosition - 0.01
-            elif smoothedPosition <= (maxStaticFriction / 0.16 + 0.01):
+            elif smoothedPosition <= (maxStaticFriction / spring_rate + 0.01):
                 calibrated = True
                 integral = 0
 
         else:
             # === Control ===
-            detectedForce = smoothedPosition * 0.16
+            detectedForce = smoothedPosition * spring_rate
             if not sliding and detectedForce > maxStaticFriction * 1.2:
                 sliding = True
 
             frictionForce = dynamicFriction if sliding else maxStaticFriction
-            targetPosition = frictionForce / 0.16
+            targetPosition = frictionForce / spring_rate
 
         # === PID ===
         velocity = (smoothedPosition - lastSmoothedPosition) / dt
@@ -98,8 +100,8 @@ try:
         angle_change = controlAngle - servoBaseAngle
         servoBaseAngle = controlAngle
 
-        motorVelocity = angle_change / 0.02
-        motorVelocity = np.clip(motorVelocity, -angularSpeed * 0.02, angularSpeed * 0.02) * angle_to_distance
+        motorVelocity = angle_change / dt
+        motorVelocity = np.clip(motorVelocity, -angularSpeed * dt * 1000, angularSpeed * dt * 1000) * angle_to_distance
         external_velocity = velocity - motorVelocity
 
         if not calibrated:
