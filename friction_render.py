@@ -116,6 +116,7 @@ try:
         elif calibrated and sliding and external_velocity < -3:
             time.sleep(3)
             sliding = False
+            calibrated = False
 
         previous_error = error
 
@@ -123,7 +124,11 @@ try:
         last_angle_change = controlAngle - servoBaseAngle
         servoBaseAngle = controlAngle
         lastSmoothedPosition = smoothedPosition
-        time.sleep(0.02 - (time.time() - last_time))  # 10ms loop (100Hz)
+
+        try:
+            time.sleep(0.02 - (time.time() - last_time))  # 10ms loop (100Hz)
+        except:
+            pass
 
 except KeyboardInterrupt:
     print("\nExiting...")
