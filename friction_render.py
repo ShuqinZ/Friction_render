@@ -24,7 +24,7 @@ maxStaticFriction = 0.8
 dynamicFriction = 0.4
 delta_v = 0.2  # mm/s
 initTime = 1.0  # seconds
-Kp, Ki, Kd = 1, 0, 0.15
+Kp, Ki, Kd = 2, 0, 0.15
 alpha = 0.3  # smoothing factor for low-pass filter
 
 pot_fluc = 0.012
@@ -87,8 +87,6 @@ try:
         else:
             # === Control ===
             detectedForce = smoothedPosition * spring_rate
-            if not sliding and smoothedPosition > (maxStaticFriction + spring_rate * pot_fluc) * 1.2:
-                sliding = True
 
             frictionForce = dynamicFriction if sliding else maxStaticFriction
             targetPosition = frictionForce / spring_rate
@@ -110,6 +108,10 @@ try:
             motorVelocity = 0
 
         external_velocity = velocity - motorVelocity
+
+        if not sliding and abs(external_velocity) > 3 and smoothedPosition > (maxStaticFriction + spring_rate * pot_fluc) * 1.2:
+            sliding = True
+
         previous_error = error
 
         print(f"{error:.2f}, {controlSignal:.2f}, {controlAngle:.2f}, {targetPosition:.2f}, {smoothedPosition:.2f}, {velocity:.3f}, {motorVelocity:.3f},{external_velocity:.3f}, {frictionForce:.2f}, {detectedForce:.2f}, {100 * (detectedForce - frictionForce)/frictionForce if frictionForce > 0 else 0:.2f}%, {dt:.5f}")
