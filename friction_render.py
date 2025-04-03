@@ -86,7 +86,7 @@ try:
 
         else:
             # === Control ===
-            if not sliding and smoothedPosition > maxStaticFriction/spring_rate + pot_fluc:
+            if not sliding and smoothedPosition > (maxStaticFriction/spring_rate + pot_fluc) * 1.1:
                 sliding = True
 
             frictionForce = dynamicFriction if sliding else maxStaticFriction
