@@ -66,16 +66,20 @@ try:
         pos1 = read_smoothed_position()
 
         start_time = time.time()
+        move_time = start_time
         servo.set(to_angle)
         # Wait briefly for movement to complete
-        time.sleep(0.1)  # start delay to ensure motion starts
+        # time.sleep(0.1)  # start delay to ensure motion starts
         while True:
             pos2 = read_smoothed_position()
+            if abs(pos2 - pos1) > 1.05 * pos1:  # close enough
+                move_time = time.time()
             if abs(pos2 - pos1) > 0.95 * (step * angle_to_distance):  # close enough
                 break
-            time.sleep(0.01)
+            # time.sleep(0.01)
         end_time = time.time()
 
+        delay = move_time - start_time
         duration = end_time - start_time
         distance_moved = pos2 - pos1
         velocity = distance_moved / duration if duration > 0 else 0
