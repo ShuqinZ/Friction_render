@@ -126,6 +126,7 @@ try:
             targetPosition = 0
             last_angle_change = 0
             start_time = time.time()
+            last_time = start_time
 
 
         previous_error = error
