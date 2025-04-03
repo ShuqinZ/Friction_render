@@ -68,13 +68,13 @@ try:
             print("Calibrating...", end=" ")
             frictionForce = 0
             if smoothedPosition < (maxStaticFriction / 0.16 + 4):
-                targetPosition = smoothedPosition - 1
+                targetPosition = smoothedPosition + 1
             elif smoothedPosition < (maxStaticFriction / 0.16 + 1):
-                targetPosition = smoothedPosition - 0.2
+                targetPosition = smoothedPosition + 0.2
             elif smoothedPosition < (maxStaticFriction / 0.16 + 0.1):
-                targetPosition = smoothedPosition - 0.1
+                targetPosition = smoothedPosition + 0.1
             elif smoothedPosition < (maxStaticFriction / 0.16 + 0.02):
-                targetPosition = smoothedPosition - 0.01
+                targetPosition = smoothedPosition + 0.01
             elif smoothedPosition >= (maxStaticFriction / 0.16 + 0.01):
                 calibrated = True
                 integral = 0
