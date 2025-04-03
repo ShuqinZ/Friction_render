@@ -113,7 +113,7 @@ try:
             external_velocity = velocity - motorVelocity
             previous_error = error
 
-            pid_scale_factor = 1 + (external_velocity-3)/50 if external_velocity > 3 and calibrated and sliding else 1
+            pid_scale_factor = 1 + (min(external_velocity, 20)-3)/30 if external_velocity > 3 and calibrated and sliding else 1
 
             if calibrated and not sliding and external_velocity > 3 and smoothedPosition > (maxStaticFriction + spring_rate * pot_fluc) * 1.2:
                 sliding = True
