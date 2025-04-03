@@ -23,7 +23,7 @@ servo = pi5RC(18)  # GPIO18 using pwmchip2/pwm2
 alpha = 0.3
 
 step_sizes = [0.05, 0.1, 0.5, 0.6, 0.7, 0.8, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 10, 45]
-start_angle = 12
+start_angle = 20
 csv_filename = "servo_velocity_calibration.csv"
 
 # === Start test ===

@@ -24,7 +24,7 @@ maxStaticFriction = 0.8
 dynamicFriction = 0.4
 delta_v = 0.2  # mm/s
 initTime = 1.0  # seconds
-Kp, Ki, Kd = 1, 0, 0.2
+Kp, Ki, Kd = 1, 0, 0.15
 alpha = 0.3  # smoothing factor for low-pass filter
 
 pot_fluc = 0.012
@@ -87,7 +87,7 @@ try:
         else:
             # === Control ===
             detectedForce = smoothedPosition * spring_rate
-            if not sliding and smoothedPosition > (maxStaticFriction + spring_rate * pot_fluc) * 1.1:
+            if not sliding and smoothedPosition > (maxStaticFriction + spring_rate * pot_fluc) * 1.2:
                 sliding = True
 
             frictionForce = dynamicFriction if sliding else maxStaticFriction
