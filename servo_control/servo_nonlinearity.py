@@ -76,6 +76,7 @@ try:
             if last_position is not None and abs(pos2 - last_position) < 0.001:  # close enough
                 break
             last_position = pos2
+            print(f"{pos2}, ")
             # time.sleep(0.01)
         end_time = time.time()
 
