@@ -88,7 +88,11 @@ try:
             # === Control ===
             detectedForce = smoothedPosition * spring_rate
 
-            frictionForce = dynamicFriction if sliding else maxStaticFriction
+            if sliding:
+                frictionForce = dynamicFriction
+            else:
+                frictionForce = maxStaticFriction
+
             targetPosition = frictionForce / spring_rate
 
         # === PID ===
@@ -106,8 +110,12 @@ try:
 
         external_velocity = velocity - motorVelocity
 
-        if calibrated and not sliding and abs(external_velocity) > 3 and smoothedPosition > (maxStaticFriction + spring_rate * pot_fluc) * 1.2:
+        if calibrated and not sliding and external_velocity > 3 and smoothedPosition > (maxStaticFriction + spring_rate * pot_fluc) * 1.2:
             sliding = True
+
+        elif calibrated and sliding and external_velocity < -3:
+            time.sleep(3)
+            sliding = False
 
         previous_error = error
 
