@@ -129,8 +129,8 @@ while True:
             except:
                 pass
 
-except KeyboardInterrupt:
-    print("\nExiting...")
-    servo.set(100)
-    time.sleep(1)
-    del servo
+    except KeyboardInterrupt:
+        print("\nExiting...")
+        servo.set(100)
+        time.sleep(1)
+        del servo
