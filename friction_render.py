@@ -101,12 +101,12 @@ try:
 
         servo.set(controlAngle)
         motorVelocity = last_angle_change / dt
-        motorVelocity = np.clip(motorVelocity, -angularSpeed * dt, angularSpeed * dt) * angle_to_distance
+        motorVelocity = np.clip(motorVelocity, -angularSpeed, angularSpeed) * angle_to_distance
 
 
         external_velocity = velocity - motorVelocity
 
-        if not sliding and abs(external_velocity) > 3 and smoothedPosition > (maxStaticFriction + spring_rate * pot_fluc) * 1.2:
+        if not sliding and abs(external_velocity) > 5 and smoothedPosition > (maxStaticFriction + spring_rate * pot_fluc) * 1.2:
             sliding = True
 
         previous_error = error
