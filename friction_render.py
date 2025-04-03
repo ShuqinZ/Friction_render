@@ -6,6 +6,7 @@ import adafruit_ads1x15.ads1115 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn
 
 from utils.pi5RC import pi5RC
+from utils.tools import *
 
 # === Hardware Setup ===
 i2c = busio.I2C(board.SCL, board.SDA)
@@ -48,7 +49,7 @@ try:
 
         # === Read and smooth position ===
         raw_val = pot.value  # 0–32767
-        position = ((raw_val / 32767.0) * 10.5) / 1.01 + 1
+        position = read_potentialmeter(raw_val)
 
         if lastSmoothedPosition is None:
             smoothedPosition = position
