@@ -45,9 +45,8 @@ class pi5RC:
         self.enableFlag = flag
         self._write(f"{self.pwm_path}/enable", "1" if flag else "0")
 
-    def set(self, angle: float, angle_range: float = 180.0, pulse_range: tuple = (500, 2400), granularity: int = 10):
-        pulse_width = (angle / angle_range) * (pulse_range[1] - pulse_range[0]) + pulse_range[0]
-        pulse_width = int(round(pulse_width/granularity)) * granularity
+    def set(self, angle: float, angle_range: float = 180.0, pulse_range: tuple = (500, 2400)):
+        pulse_width = int(((angle / angle_range) * (pulse_range[1] - pulse_range[0]) + pulse_range[0]))
         self.set_pwm(pulse_width)
 
     def set_pwm(self, onTime_us: int):
