@@ -24,7 +24,7 @@ maxStaticFriction = 0.8
 dynamicFriction = 0.4
 delta_v = 0.2  # mm/s
 initTime = 1.0  # seconds
-Kp, Ki, Kd = 0.8, 0.2, 0.15
+Kp, Ki, Kd = 0.8, 0.1, 0.1
 alpha = 0.3  # smoothing factor for low-pass filter
 
 pot_fluc = 0.012
@@ -106,7 +106,7 @@ try:
 
         external_velocity = velocity - motorVelocity
 
-        if calibrated and not sliding and abs(external_velocity) > 5 and smoothedPosition > (maxStaticFriction + spring_rate * pot_fluc) * 1.2:
+        if calibrated and not sliding and abs(external_velocity) > 10 and smoothedPosition > (maxStaticFriction + spring_rate * pot_fluc) * 1.2:
             sliding = True
 
         previous_error = error
