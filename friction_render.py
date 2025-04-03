@@ -104,8 +104,7 @@ try:
         motorVelocity = np.clip(motorVelocity, -angularSpeed * dt * 1000, angularSpeed * dt * 1000) * angle_to_distance
         external_velocity = velocity - motorVelocity
 
-        if not calibrated:
-            servo.set(controlAngle)
+        servo.set(controlAngle)
 
         previous_error = error
 
