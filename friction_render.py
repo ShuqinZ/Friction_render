@@ -36,6 +36,7 @@ detectedForce = 0
 calibrated = False
 sliding = False
 targetPosition = 0
+last_angle_change = 0
 
 servo.set(0)
 time.sleep(1)
@@ -97,10 +98,8 @@ try:
         derivative = (error - previous_error) / dt if dt > 0 else 0
         controlSignal = -(Kp * error + Ki * integral + Kd * derivative)
         controlAngle = np.clip(servoBaseAngle + controlSignal, 0, 180)
-        angle_change = controlAngle - servoBaseAngle
-        servoBaseAngle = controlAngle
 
-        motorVelocity = angle_change / dt
+        motorVelocity = last_angle_change / dt
         motorVelocity = np.clip(motorVelocity, -angularSpeed * dt * 1000, angularSpeed * dt * 1000) * angle_to_distance
         external_velocity = velocity - motorVelocity
 
@@ -109,7 +108,8 @@ try:
         previous_error = error
 
         print(f"{error:.2f}, {controlSignal:.2f}, {controlAngle:.2f}, {targetPosition:.2f}, {smoothedPosition:.2f}, {velocity:.3f}, {motorVelocity:.3f},{external_velocity:.3f}, {frictionForce:.2f}, {detectedForce:.2f}, {100 * (detectedForce - frictionForce)/frictionForce if frictionForce > 0 else 0:.2f}%")
-
+        last_angle_change = controlAngle - servoBaseAngle
+        servoBaseAngle = controlAngle
         lastSmoothedPosition = smoothedPosition
         time.sleep(0.02)  # 10ms loop (100Hz)
 
