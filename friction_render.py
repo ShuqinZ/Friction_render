@@ -29,25 +29,25 @@ alpha = 0.3  # smoothing factor for low-pass filter
 
 pot_fluc = 0.012
 
-while True:
-    # === State Variables ===
-    lastSmoothedPosition = None  # to be initialized with first reading
-    integral = 0
-    previous_error = 0
-    servoBaseAngle = 0
-    detectedForce = 0
-    calibrated = False
-    sliding = False
-    targetPosition = 0
-    last_angle_change = 0
+try:
+    while True:
+        # === State Variables ===
+        lastSmoothedPosition = None  # to be initialized with first reading
+        integral = 0
+        previous_error = 0
+        servoBaseAngle = 0
+        detectedForce = 0
+        calibrated = False
+        sliding = False
+        targetPosition = 0
+        last_angle_change = 0
 
-    servo.set(0)
-    time.sleep(1)
+        servo.set(0)
+        time.sleep(1)
 
-    start_time = time.time()
-    last_time = start_time
+        start_time = time.time()
+        last_time = start_time
 
-    try:
         while True:
             now = time.time()
             dt = now - last_time
@@ -74,9 +74,9 @@ while True:
                 print("Calibrating...", end=" ")
                 frictionForce = 0
                 if smoothedPosition > (maxStaticFriction / spring_rate + 4):
-                    targetPosition = smoothedPosition - 1
+                    targetPosition = smoothedPosition - 2
                 elif smoothedPosition > (maxStaticFriction / spring_rate + 1):
-                    targetPosition = smoothedPosition - 0.2
+                    targetPosition = smoothedPosition - 0.3
                 elif smoothedPosition > (maxStaticFriction / spring_rate + 0.1):
                     targetPosition = smoothedPosition - 0.1
                 elif smoothedPosition > (maxStaticFriction / spring_rate + 0.02):
@@ -129,8 +129,8 @@ while True:
             except:
                 pass
 
-    except KeyboardInterrupt:
-        print("\nExiting...")
-        servo.set(100)
-        time.sleep(1)
-        del servo
+except KeyboardInterrupt:
+    print("\nExiting...")
+    servo.set(100)
+    time.sleep(1)
+    del servo
