@@ -114,7 +114,7 @@ try:
             sliding = True
 
         elif calibrated and sliding and external_velocity < -3:
-            time.sleep(3)
+            time.sleep(2)
             sliding = False
             calibrated = False
             servo.set(0)
@@ -127,6 +127,7 @@ try:
             last_angle_change = 0
             start_time = time.time()
             last_time = start_time
+            time.sleep(1)
 
 
         previous_error = error
