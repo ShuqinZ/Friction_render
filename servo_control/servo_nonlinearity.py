@@ -72,9 +72,9 @@ try:
         # time.sleep(0.1)  # start delay to ensure motion starts
         while True:
             pos2 = read_smoothed_position()
-            if abs(pos2 - pos1) > 1.05 * pos1:  # close enough
+            if abs(pos2 - pos1) > pos1 + 0.005:  # close enough
                 move_time = time.time()
-            if abs(pos2 - pos1) > 0.95 * (step * angle_to_distance):  # close enough
+            if abs(pos2 - pos1) > (step * angle_to_distance):  # close enough
                 break
             # time.sleep(0.01)
         end_time = time.time()
@@ -84,7 +84,7 @@ try:
         distance_moved = pos2 - pos1
         velocity = distance_moved / duration if duration > 0 else 0
 
-        print(f"Moved {distance_moved:.4f} mm in {duration:.4f} s — velocity: {velocity:.4f} mm/s")
+        print(f"Moved {distance_moved:.4f} mm in {duration:.4f} s, delay:{delay:.4f} s — velocity: {velocity:.4f} mm/s")
 
         results.append({
             "step_deg": step,
