@@ -61,6 +61,9 @@ try:
 
         print(f"\nStep: {step:.2f}° from {from_angle}° to {to_angle}°")
 
+        servo.set(0)
+        time.sleep(1.5)
+
         servo.set(from_angle)
         time.sleep(1.5)
         pos1 = read_smoothed_position()
