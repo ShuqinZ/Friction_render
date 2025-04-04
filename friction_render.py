@@ -20,6 +20,10 @@ angularSpeed = 600  # degrees/s
 gear_diameter = 22.0  # mm
 spring_rate = 0.16
 
+max_angle = 120
+# pwm_range = (500, 2400)
+pwm_range = (900, 2100)
+
 maxStaticFriction = 0.8
 dynamicFriction = 0.4
 delta_v = 0.2  # mm/s
@@ -43,7 +47,7 @@ try:
         last_angle_change = 0
         pid_scale_factor = 1
 
-        servo.set(0)
+        servo.set(0, angle_range=max_angle, pulse_range=pwm_range)
         time.sleep(1)
 
         start_time = time.time()
@@ -103,9 +107,9 @@ try:
             integral += error * dt
             derivative = (error - previous_error) / dt if dt > 0 else 0
             controlSignal = -(Kp * error + Ki * integral + Kd * derivative) * pid_scale_factor
-            controlAngle = np.clip(servoBaseAngle + controlSignal, 0, 180)
+            controlAngle = np.clip(servoBaseAngle + controlSignal, 0, max_angle)
 
-            servo.set(controlAngle)
+            servo.set(controlAngle, angle_range=max_angle, pulse_range=pwm_range)
             motorVelocity = last_angle_change / dt
             motorVelocity = np.clip(motorVelocity, -angularSpeed, angularSpeed) * angle_to_distance
 
@@ -134,6 +138,6 @@ try:
 
 except KeyboardInterrupt:
     print("\nExiting...")
-    servo.set(100)
+    servo.set(80, angle_range=max_angle, pulse_range=pwm_range)
     time.sleep(1)
     del servo
