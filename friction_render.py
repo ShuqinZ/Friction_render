@@ -138,6 +138,6 @@ try:
 
 except KeyboardInterrupt:
     print("\nExiting...")
-    servo.set(80, angle_range=max_angle, pulse_range=pwm_range)
+    servo.set(0, angle_range=max_angle, pulse_range=pwm_range)
     time.sleep(1)
     del servo
