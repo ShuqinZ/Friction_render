@@ -132,12 +132,12 @@ try:
             lastSmoothedPosition = smoothedPosition
 
             try:
-                time.sleep(0.02 - (time.time() - last_time))  # 10ms loop (100Hz)
+                time.sleep(0.01 - (time.time() - last_time))  # 10ms loop (100Hz)
             except:
                 pass
 
 except KeyboardInterrupt:
     print("\nExiting...")
-    servo.set(80, angle_range=max_angle, pulse_range=pwm_range)
+    servo.set(100, angle_range=max_angle, pulse_range=pwm_range)
     time.sleep(1)
     del servo
