@@ -22,6 +22,10 @@ servo = pi5RC(18)  # GPIO18 using pwmchip2/pwm2
 
 alpha = 0.3
 
+max_angle = 120
+# pwm_range = (500, 2400)
+pwm_range = (900, 2100)
+
 step_sizes = [0.05, 0.1, 0.5, 0.6, 0.7, 0.8, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 10, 45]
 start_angle = 20
 csv_filename = "servo_velocity_calibration.csv"
@@ -29,11 +33,11 @@ csv_filename = "servo_velocity_calibration.csv"
 # === Start test ===
 try:
     print("Measuring angle-to-distance scale...")
-    servo.set(start_angle)
+    servo.set(start_angle, angle_range=max_angle, pulse_range=pwm_range)
     time.sleep(1.5)
     pos_start = read_smoothed_position(pot)
 
-    servo.set(60)
+    servo.set(60, angle_range=max_angle, pulse_range=pwm_range)
     time.sleep(2.0)
     pos_end = read_smoothed_position(pot)
 
@@ -53,16 +57,16 @@ try:
 
         print(f"\nStep: {step:.2f}° from {from_angle}° to {to_angle}°")
 
-        servo.set(0)
+        servo.set(0, angle_range=max_angle, pulse_range=pwm_range)
         time.sleep(1.5)
 
-        servo.set(from_angle)
+        servo.set(from_angle, angle_range=max_angle, pulse_range=pwm_range)
         time.sleep(1.5)
         pos1 = read_smoothed_position(pot)
 
         start_time = time.time()
         move_time = start_time
-        servo.set(to_angle)
+        servo.set(to_angle, angle_range=max_angle, pulse_range=pwm_range)
         # Wait briefly for movement to complete
         # time.sleep(0.1)  # start delay to ensure motion starts
         last_position = None
