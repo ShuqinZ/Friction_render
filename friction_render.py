@@ -15,7 +15,8 @@ pot = AnalogIn(ads, ADS.P0)
 servo = pi5RC(18)  # GPIO18 with working PWM2 on pwmchip2
 
 # === Constants ===
-angle_to_distance = -0.21  # mm per degree
+# angle_to_distance = -0.21  # mm per degree
+angle_to_distance = -0.18  # mm per degree
 angularSpeed = 600  # degrees/s
 gear_diameter = 22.0  # mm
 spring_rate = 0.16
