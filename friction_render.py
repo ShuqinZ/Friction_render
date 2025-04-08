@@ -133,7 +133,7 @@ try:
             if calibrated and not sliding and external_velocity > delta_v and smoothedPosition > (maxStaticFriction/spring_rate + spring_rate * pot_fluc) * 1.05:
                 sliding = True
 
-            elif calibrated and sliding and velocity < 0 and motorVelocity > 0:
+            elif calibrated and sliding and velocity < 0 and motorVelocity > -1e-6:
                 time.sleep(2)
                 break
 
