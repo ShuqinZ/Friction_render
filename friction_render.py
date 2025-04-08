@@ -116,7 +116,7 @@ try:
             # motorVelocity = last_angle_change / dt
             # motorVelocity = np.clip(motorVelocity, -angularSpeed, angularSpeed) * angle_to_distance
 
-            motorVelocity = model.predict([[last_angle_change]])[0]
+            motorVelocity = np.sign(last_angle_change) * min(model.predict([[abs(last_angle_change)]])[0], 0)
 
             external_velocity = velocity - motorVelocity
             previous_error = error
