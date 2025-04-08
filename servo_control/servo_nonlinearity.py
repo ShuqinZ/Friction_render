@@ -26,7 +26,7 @@ max_angle = 120
 # pwm_range = (500, 2400)
 pwm_range = (900, 2100)
 
-step_sizes = [0.05, 0.1, 0.5, 0.6, 0.7, 0.8, 1, 1.5, 2, 2.5, 3, 3.5, 4, 4.5, 5, 10, 45]
+step_sizes = [0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1, 1.2, 1.5, 1.7, 2, 2.2, 2.5, 2.7, 3, 3.5, 4, 4.5, 5, 7, 10, 15, 20, 30, 45]
 start_angle = 20
 csv_filename = "servo_velocity_calibration.csv"
 
@@ -47,35 +47,38 @@ try:
     results = []
 
     print("\n=== Running Step Tests ===")
-    for step in step_sizes:
-        from_angle = start_angle
-        to_angle = start_angle + step
 
-        if to_angle > 60:
-            print(f"Skipping step size {step}° — exceeds 60°")
-            continue
+    for i in range(3):
+        for step in step_sizes:
+            from_angle = start_angle
+            to_angle = start_angle + step
 
-        print(f"\nStep: {step:.2f}° from {from_angle}° to {to_angle}°")
+            if to_angle > 60:
+                print(f"Skipping step size {step}° — exceeds 60°")
+                continue
 
-        servo.set(0, angle_range=max_angle, pulse_range=pwm_range)
-        time.sleep(2)
+            print(f"\nStep: {step:.2f}° from {from_angle}° to {to_angle}°")
 
-        servo.set(from_angle, angle_range=max_angle, pulse_range=pwm_range)
-        time.sleep(1.5)
-        pos1 = read_smoothed_position(pot)
+            servo.set(0, angle_range=max_angle, pulse_range=pwm_range)
+            time.sleep(2)
 
-        servo.set(to_angle, angle_range=max_angle, pulse_range=pwm_range)
-        time.sleep(0.019)
-        pos2 = read_potentialmeter(pot)
+            servo.set(from_angle, angle_range=max_angle, pulse_range=pwm_range)
+            time.sleep(1.5)
+            pos1 = read_smoothed_position(pot)
 
-        distance_moved = pos2 - pos1
-        velocity = distance_moved / 0.2
+            servo.set(to_angle, angle_range=max_angle, pulse_range=pwm_range)
+            time.sleep(0.019)
+            pos2 = read_potentialmeter(pot)
 
-        results.append({
-            "distance_mm": distance_moved,
-            "duration_s": 0.2,
-            "velocity_mm_per_s": velocity
-        })
+            distance_moved = pos2 - pos1
+            velocity = distance_moved / 0.2
+
+            results.append({
+                "distance_mm": distance_moved,
+                "duration_s": 0.2,
+                "velocity_mm_per_s": velocity
+            })
+    }
     # === Write CSV ===
     with open(csv_filename, "w", newline="") as csvfile:
         fieldnames = ["distance_mm", "duration_s", "velocity_mm_per_s"]
