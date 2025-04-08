@@ -30,7 +30,7 @@ pwm_range = (900, 2100)
 
 maxStaticFriction = 0.8
 dynamicFriction = 0.4
-delta_v = 0.2  # mm/s
+delta_v = 20  # mm/s
 initTime = 1.0  # seconds
 Kp, Ki, Kd = 0.8, 0, 0
 alpha = 0.3  # smoothing factor for low-pass filter
@@ -104,7 +104,7 @@ try:
                 else:
                     frictionForce = maxStaticFriction
 
-                targetPosition = frictionForce / spring_rate - 0.1
+                targetPosition = frictionForce / spring_rate - 1
 
             # === PID ===
             velocity = (smoothedPosition - lastSmoothedPosition) / dt
