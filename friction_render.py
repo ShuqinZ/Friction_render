@@ -132,7 +132,8 @@ try:
                 time.sleep(2)
                 break
 
-            last_angle_change = controlAngle - servoBaseAngle
+
+            last_angle_change = alpha * (controlAngle - servoBaseAngle) + (1 - alpha) * last_angle_change
             servoBaseAngle = controlAngle
             lastSmoothedPosition = smoothedPosition
 
