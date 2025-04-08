@@ -104,7 +104,7 @@ try:
                 else:
                     frictionForce = maxStaticFriction
 
-                targetPosition = frictionForce / spring_rate
+                targetPosition = frictionForce / spring_rate - 0.1
 
             # === PID ===
             velocity = (smoothedPosition - lastSmoothedPosition) / dt
