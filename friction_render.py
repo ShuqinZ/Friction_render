@@ -126,14 +126,14 @@ try:
             external_velocity = velocity - motorVelocity
             previous_error = error
 
-            pid_scale_factor = 1 + (min(external_velocity, 50)-3)/50 if velocity - motorVelocity > delta_v and calibrated and sliding else 1
+            pid_scale_factor = 1 + (min(external_velocity, 50)-3)/50 if external_velocity > delta_v and calibrated and sliding else 1
 
             print(f"{error:.2f}, {controlSignal:.2f}, {controlAngle:.2f}, {targetPosition:.2f}, {smoothedPosition:.2f}, {velocity:.3f}, {motorVelocity:.3f},{external_velocity:.3f}, {frictionForce:.2f}, {detectedForce:.2f}, {100 * (detectedForce - frictionForce) / frictionForce if frictionForce > 0 else 0:.2f}%, {dt:.5f}")
 
             if calibrated and not sliding and external_velocity > delta_v and smoothedPosition > (maxStaticFriction/spring_rate + spring_rate * pot_fluc) * 1.05:
                 sliding = True
 
-            elif calibrated and sliding and velocity < 0 and external_velocity < -10:
+            elif calibrated and sliding and velocity < 0 and motorVelocity > 0:
                 time.sleep(2)
                 break
 
