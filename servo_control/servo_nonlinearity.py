@@ -68,7 +68,7 @@ try:
 
             servo.set(to_angle, angle_range=max_angle, pulse_range=pwm_range)
             time.sleep(0.019)
-            pos2 = read_potentialmeter(pot)
+            pos2 = read_potentialmeter(pot.value)
 
             distance_moved = pos2 - pos1
             velocity = distance_moved / 0.2
