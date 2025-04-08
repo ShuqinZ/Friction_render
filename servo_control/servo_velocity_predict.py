@@ -6,7 +6,7 @@ from sklearn.linear_model import LinearRegression
 import joblib
 
 # Load CSV
-df = pd.read_csv("../assets/servo_velocity_calibration_0.2.csv")
+df = pd.read_csv("../assets/servo_velocity_calibration_0.2_continues.csv")
 
 # Check the columns
 print("Columns:", df.columns)
@@ -24,8 +24,8 @@ model.fit(X, y)
 
 
 # Save the trained model to a file
-joblib.dump(model, '../assets/servo_angle_to_speed_model.pkl')
-print("Model saved to servo_angle_to_speed_model.pkl")
+joblib.dump(model, '../assets/servo_speed_continues.pkl')
+print("Model saved to servo_speed_continues.pkl")
 
 # Print the relationship
 print(f"Estimated linear speed = {model.coef_[0]:.4f} * command_angle_change + {model.intercept_:.4f}")

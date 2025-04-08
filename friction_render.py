@@ -14,7 +14,8 @@ i2c = busio.I2C(board.SCL, board.SDA)
 ads = ADS.ADS1115(i2c)
 pot = AnalogIn(ads, ADS.P0)
 servo = pi5RC(18)  # GPIO18 with working PWM2 on pwmchip2
-model = joblib.load('assets/servo_angle_to_speed_model.pkl')
+static_model = joblib.load('assets/servo_speed_static.pkl')
+continues_model = joblib.load('assets/servo_speed_continues.pkl')
 
 # === Constants ===
 # angle_to_distance = -0.21  # mm per degree
@@ -48,6 +49,7 @@ try:
         sliding = False
         targetPosition = 0
         last_angle_change = 0
+        cold_start = True
         pid_scale_factor = 1
 
         servo.set(0, angle_range=max_angle, pulse_range=pwm_range)
@@ -116,7 +118,10 @@ try:
             # motorVelocity = last_angle_change / dt
             # motorVelocity = np.clip(motorVelocity, -angularSpeed, angularSpeed) * angle_to_distance
 
-            motorVelocity = np.sign(last_angle_change) * min(model.predict([[abs(last_angle_change)]])[0], 0)
+            if cold_start:
+                motorVelocity = np.sign(last_angle_change) * min(continues_model.predict([[abs(last_angle_change)]])[0], 0)
+            else:
+                motorVelocity = np.sign(last_angle_change) * min(static_model.predict([[abs(last_angle_change)]])[0], 0)
 
             external_velocity = velocity - motorVelocity
             previous_error = error
@@ -132,7 +137,13 @@ try:
                 time.sleep(2)
                 break
 
-            last_angle_change = controlAngle - servoBaseAngle
+            angle_change = controlAngle - servoBaseAngle
+            if angle_change * last_angle_change > 0:
+                # movement same angle
+                cold_start = False
+            else:
+                cold_start = True
+            last_angle_change = angle_change
             servoBaseAngle = controlAngle
             lastSmoothedPosition = smoothedPosition
 
