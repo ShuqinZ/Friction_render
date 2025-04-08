@@ -83,7 +83,7 @@ try:
             if not calibrated:
                 print("Calibrating...", end=" ")
                 frictionForce = 0
-                if smoothedPosition > (maxStaticFriction / spring_rate + 4):
+                if smoothedPosition > (1.1 + 4):
                     targetPosition = smoothedPosition - 2
                 elif smoothedPosition > (maxStaticFriction / spring_rate + 1):
                     targetPosition = smoothedPosition - 0.3
@@ -130,7 +130,7 @@ try:
 
             print(f"{error:.2f}, {controlSignal:.2f}, {controlAngle:.2f}, {targetPosition:.2f}, {smoothedPosition:.2f}, {velocity:.3f}, {motorVelocity:.3f},{external_velocity:.3f}, {frictionForce:.2f}, {detectedForce:.2f}, {100 * (detectedForce - frictionForce) / frictionForce if frictionForce > 0 else 0:.2f}%, {dt:.5f}")
 
-            if calibrated and not sliding and external_velocity > delta_v and smoothedPosition > (maxStaticFriction + spring_rate * pot_fluc) * 1.2:
+            if calibrated and not sliding and external_velocity > delta_v and smoothedPosition > (maxStaticFriction/spring_rate + spring_rate * pot_fluc) * 1.05:
                 sliding = True
 
             elif calibrated and sliding and velocity < 0 and external_velocity < -10:
