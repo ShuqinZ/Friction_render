@@ -4,6 +4,7 @@ import busio
 import numpy as np
 import adafruit_ads1x15.ads1115 as ADS
 from adafruit_ads1x15.analog_in import AnalogIn
+import joblib
 
 from utils.pi5RC import pi5RC
 from utils.tools import *
@@ -13,6 +14,7 @@ i2c = busio.I2C(board.SCL, board.SDA)
 ads = ADS.ADS1115(i2c)
 pot = AnalogIn(ads, ADS.P0)
 servo = pi5RC(18)  # GPIO18 with working PWM2 on pwmchip2
+model = joblib.load('assets/servo_angle_to_speed_model.pkl')
 
 # === Constants ===
 # angle_to_distance = -0.21  # mm per degree
@@ -111,9 +113,10 @@ try:
             controlAngle = np.clip(servoBaseAngle + controlSignal, 0, max_angle)
 
             servo.set(controlAngle, angle_range=max_angle, pulse_range=pwm_range)
-            motorVelocity = last_angle_change / dt
-            motorVelocity = np.clip(motorVelocity, -angularSpeed, angularSpeed) * angle_to_distance
+            # motorVelocity = last_angle_change / dt
+            # motorVelocity = np.clip(motorVelocity, -angularSpeed, angularSpeed) * angle_to_distance
 
+            motorVelocity = model.predict([[last_angle_change]])[0]
 
             external_velocity = velocity - motorVelocity
             previous_error = error
