@@ -83,7 +83,7 @@ try:
 
     # === Write CSV ===
     with open(csv_filename, "w", newline="") as csvfile:
-        fieldnames = ["distance_mm", "duration_s", "velocity_mm_per_s"]
+        fieldnames = ["angle", "distance_mm", "velocity_mm_per_s"]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         for row in results:
