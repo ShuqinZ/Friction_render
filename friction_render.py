@@ -119,9 +119,9 @@ try:
             # motorVelocity = np.clip(motorVelocity, -angularSpeed, angularSpeed) * angle_to_distance
 
             if cold_start:
-                motorVelocity = np.sign(last_angle_change) * min(continues_model.predict([[abs(last_angle_change)]])[0], 0)
-            else:
                 motorVelocity = np.sign(last_angle_change) * min(static_model.predict([[abs(last_angle_change)]])[0], 0)
+            else:
+                motorVelocity = np.sign(last_angle_change) * min(continues_model.predict([[abs(last_angle_change)]])[0], 0)
 
             external_velocity = velocity - motorVelocity
             previous_error = error
