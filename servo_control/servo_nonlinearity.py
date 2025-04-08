@@ -78,7 +78,7 @@ try:
                 "duration_s": 0.2,
                 "velocity_mm_per_s": velocity
             })
-    }
+
     # === Write CSV ===
     with open(csv_filename, "w", newline="") as csvfile:
         fieldnames = ["distance_mm", "duration_s", "velocity_mm_per_s"]
