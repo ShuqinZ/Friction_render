@@ -35,8 +35,9 @@ csv_filename = f"servo_velocity_calibration_{timestep}.csv"
 # === Start test ===
 try:
     print("Measuring angle-to-distance scale...")
+    servo.set(start_angle - 1, angle_range=max_angle, pulse_range=pwm_range)
+    time.sleep(0.2)
     servo.set(start_angle, angle_range=max_angle, pulse_range=pwm_range)
-    time.sleep(1.5)
     pos_start = read_smoothed_position(pot)
 
     # servo.set(60, angle_range=max_angle, pulse_range=pwm_range)
