@@ -50,7 +50,6 @@ try:
 
     print("\n=== Running Step Tests ===")
 
-    for i in range(3):
     for step in step_sizes:
         from_angle = start_angle
         to_angle = start_angle + step
