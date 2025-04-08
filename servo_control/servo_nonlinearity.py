@@ -37,12 +37,12 @@ try:
     time.sleep(1.5)
     pos_start = read_smoothed_position(pot)
 
-    servo.set(60, angle_range=max_angle, pulse_range=pwm_range)
-    time.sleep(2.0)
-    pos_end = read_smoothed_position(pot)
-
-    angle_to_distance = (pos_end - pos_start) / (60 - start_angle)
-    print(f"angle_to_distance: {angle_to_distance:.5f} mm/deg")
+    # servo.set(60, angle_range=max_angle, pulse_range=pwm_range)
+    # time.sleep(2.0)
+    # pos_end = read_smoothed_position(pot)
+    #
+    # angle_to_distance = (pos_end - pos_start) / (60 - start_angle)
+    # print(f"angle_to_distance: {angle_to_distance:.5f} mm/deg")
 
     results = []
 
@@ -58,52 +58,27 @@ try:
         print(f"\nStep: {step:.2f}° from {from_angle}° to {to_angle}°")
 
         servo.set(0, angle_range=max_angle, pulse_range=pwm_range)
-        time.sleep(1.5)
+        time.sleep(2)
 
         servo.set(from_angle, angle_range=max_angle, pulse_range=pwm_range)
         time.sleep(1.5)
         pos1 = read_smoothed_position(pot)
 
-        start_time = time.time()
-        move_time = start_time
         servo.set(to_angle, angle_range=max_angle, pulse_range=pwm_range)
-        # Wait briefly for movement to complete
-        # time.sleep(0.1)  # start delay to ensure motion starts
-        last_position = None
-        while True:
-            pos2 = read_smoothed_position(pot)
+        time.sleep(0.019)
+        pos2 = read_potentialmeter(pot)
 
-            if last_position is not None:
-                pos2 = alpha * pos2 + (1 - alpha) * last_position
-            if abs(pos2 - pos1) > pos1 + 0.002:  # close enough
-                move_time = time.time()
-            if last_position is not None and abs(pos2 - last_position) < 0.002:  # close enough
-                break
-            last_position = pos2
-            print(f"{pos2}, ")
-            # time.sleep(0.01)
-        end_time = time.time()
-
-        delay = move_time - start_time
-        duration = end_time - start_time
         distance_moved = pos2 - pos1
-        velocity = distance_moved / duration if duration > 0 else 0
-
-        angle_to_distance = (pos2 - pos1) / (to_angle - from_angle)
-
-        print(
-            f"Moved {distance_moved:.4f} mm in {duration:.4f} s, delay:{delay:.4f} s — angle_to_distance: {angle_to_distance:.5f} mm/deg, velocity: {velocity:.4f} mm/s")
+        velocity = distance_moved / 0.2
 
         results.append({
-            "step_deg": step,
             "distance_mm": distance_moved,
-            "duration_s": duration,
+            "duration_s": 0.2,
             "velocity_mm_per_s": velocity
         })
-
     # === Write CSV ===
     with open(csv_filename, "w", newline="") as csvfile:
-        fieldnames = ["step_deg", "distance_mm", "duration_s", "velocity_mm_per_s"]
+        fieldnames = ["distance_mm", "duration_s", "velocity_mm_per_s"]
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
         writer.writeheader()
         for row in results:

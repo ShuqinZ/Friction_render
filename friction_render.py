@@ -133,7 +133,7 @@ try:
             lastSmoothedPosition = smoothedPosition
 
             try:
-                time.sleep(0.01 - (time.time() - last_time))  # 10ms loop (100Hz)
+                time.sleep(0.02 - (time.time() - last_time))  # 10ms loop (100Hz)
             except:
                 pass
 
