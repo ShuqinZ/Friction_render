@@ -28,7 +28,9 @@ pwm_range = (900, 2100)
 
 step_sizes = [0.05, 0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 1, 1.2, 1.5, 1.7, 2, 2.2, 2.5, 2.7, 3, 3.5, 4, 4.5, 5, 7, 10, 15, 20, 30, 45]
 start_angle = 20
-csv_filename = "servo_velocity_calibration.csv"
+
+timestep = 0.2
+csv_filename = f"servo_velocity_calibration_{timestep}.csv"
 
 # === Start test ===
 try:
@@ -49,14 +51,15 @@ try:
     print("\n=== Running Step Tests ===")
 
     for i in range(3):
-        for step in step_sizes:
-            from_angle = start_angle
-            to_angle = start_angle + step
+    for step in step_sizes:
+        from_angle = start_angle
+        to_angle = start_angle + step
 
-            if to_angle > 60:
-                print(f"Skipping step size {step}° — exceeds 60°")
-                continue
+        if to_angle > 60:
+            print(f"Skipping step size {step}° — exceeds 60°")
+            continue
 
+        for i in range(3):
             print(f"\nStep: {step:.2f}° from {from_angle}° to {to_angle}°")
 
             servo.set(0, angle_range=max_angle, pulse_range=pwm_range)
@@ -67,15 +70,15 @@ try:
             pos1 = read_smoothed_position(pot)
 
             servo.set(to_angle, angle_range=max_angle, pulse_range=pwm_range)
-            time.sleep(0.019)
+            time.sleep(timestep-0.01)
             pos2 = read_potentialmeter(pot.value)
 
             distance_moved = pos2 - pos1
-            velocity = distance_moved / 0.2
+            velocity = distance_moved / timestep
 
             results.append({
+                "angle": to_angle - from_angle,
                 "distance_mm": distance_moved,
-                "duration_s": 0.2,
                 "velocity_mm_per_s": velocity
             })
 
