@@ -101,7 +101,7 @@ try:
 
             else:
                 # === Control ===
-                detectedForce = smoothedPosition * spring_rate
+                detectedForce = (smoothedPosition + 1.1) * spring_rate
 
                 if sliding:
                     frictionForce = dynamicFriction
