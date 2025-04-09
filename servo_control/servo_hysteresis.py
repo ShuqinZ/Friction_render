@@ -91,6 +91,7 @@ y = np.array(y)
 model = LinearRegression()
 model.fit(X, y)
 coeffs = model.coef_
+np.save("servo_model_coeffs.npy", model.coef_)
 
 print("\n=== Hysteresis Analysis ===")
 for i, coef in enumerate(coeffs):
@@ -115,7 +116,7 @@ plt.ylabel("Influence on Velocity")
 plt.title("Influence of Past Commands on Current Velocity")
 plt.grid(True)
 plt.tight_layout()
-plt.show()
+plt.savefig("servo_hysteresis.ong", dpi=300)
 
 # === Cleanup ===
 del servo

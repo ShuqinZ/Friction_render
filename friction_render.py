@@ -16,6 +16,7 @@ pot = AnalogIn(ads, ADS.P0)
 servo = pi5RC(18)  # GPIO18 with working PWM2 on pwmchip2
 static_model = joblib.load('assets/servo_speed_static.pkl')
 continues_model = joblib.load('assets/servo_speed_continues.pkl')
+model_coeffs = np.load("servo_model_coeffs.npy")
 
 # === Constants ===
 # angle_to_distance = -0.21  # mm per degree
@@ -34,7 +35,6 @@ delta_v = 0.5  # mm/s
 initTime = 1.0  # seconds
 Kp, Ki, Kd = 0.8, 0, 0
 alpha = 0.3  # smoothing factor for low-pass filter
-
 pot_fluc = 0.012
 
 try:
@@ -51,6 +51,8 @@ try:
         last_angle_change = 0
         cold_start = True
         pid_scale_factor = 1
+
+        motorVelocity_history = [0 for i in range(10)]
 
         servo.set(0, angle_range=max_angle, pulse_range=pwm_range)
         time.sleep(1)
@@ -118,10 +120,11 @@ try:
             # motorVelocity = last_angle_change / dt
             # motorVelocity = np.clip(motorVelocity, -angularSpeed, angularSpeed) * angle_to_distance
 
-            if cold_start:
-                motorVelocity = np.sign(last_angle_change) * min(static_model.predict([[abs(last_angle_change)]])[0], 0)
-            else:
-                motorVelocity = np.sign(last_angle_change) * min(continues_model.predict([[abs(last_angle_change)]])[0], 0)
+            # if cold_start:
+            #     motorVelocity = np.sign(last_angle_change) * min(static_model.predict([[abs(last_angle_change)]])[0], 0)
+            # else:
+            #     motorVelocity = np.sign(last_angle_change) * min(continues_model.predict([[abs(last_angle_change)]])[0], 0)
+            motorVelocity = np.dot(model_coeffs, motorVelocity_history[::-1])
 
             external_velocity = velocity - motorVelocity
             previous_error = error
@@ -138,12 +141,16 @@ try:
                 break
 
             angle_change = controlAngle - servoBaseAngle
-            if angle_change * last_angle_change > 0:
-                # movement same angle
-                cold_start = False
-            else:
-                cold_start = True
-            last_angle_change = angle_change
+            # if angle_change * last_angle_change > 0:
+            #     # movement same angle
+            #     cold_start = False
+            # else:
+            #     cold_start = True
+            # last_angle_change = angle_change
+
+            motorVelocity_history.pop(0)
+            motorVelocity_history.append(angle_change)
+
             servoBaseAngle = controlAngle
             lastSmoothedPosition = smoothedPosition
 
