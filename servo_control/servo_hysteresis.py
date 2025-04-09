@@ -37,7 +37,7 @@ current_angle = start_angle
 angle_sequence = []
 
 for _ in range(num_steps):
-    delta = np.random.choice([-5, -4, -3, -2, -1, -0.5, 0, 0.5, 1, 2, 3, 4, 5])
+    delta = np.random.choice([-20, -15, -10, -5, -4, -3, -2, -1, -0.5, 0, 0.5, 1, 2, 3, 4, 5, 10, 15, 20])
     next_angle = current_angle + delta
     # Clamp angle to [15, 60]
     next_angle = max(15, min(60, next_angle))
