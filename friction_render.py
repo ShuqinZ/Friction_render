@@ -142,7 +142,7 @@ try:
             external_velocity = velocity - motorVelocity
             previous_error = error
 
-            pid_scale_factor = 1 + np.tanh(abs(external_velocity) / 5) if abs(external_velocity) > delta_v else 1
+            pid_scale_factor = 1 + np.tanh(abs(external_velocity)) if abs(external_velocity) > delta_v else 1
 
             error_percent = 100 * (detectedForce - frictionForce) / frictionForce if frictionForce > 0 else 0
 
