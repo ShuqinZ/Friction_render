@@ -14,8 +14,8 @@ i2c = busio.I2C(board.SCL, board.SDA)
 ads = ADS.ADS1115(i2c)
 pot = AnalogIn(ads, ADS.P0)
 servo = pi5RC(18)  # GPIO18 with working PWM2 on pwmchip2
-static_model = joblib.load('assets/servo_speed_static.pkl')
-continues_model = joblib.load('assets/servo_speed_continues.pkl')
+# static_model = joblib.load('assets/servo_speed_static.pkl')
+# continues_model = joblib.load('assets/servo_speed_continues.pkl')
 model_coeffs = np.load("assets/servo_model_coeffs.npy")
 model_coeffs = model_coeffs[:4]
 
@@ -27,9 +27,9 @@ angularSpeed = 600  # degrees/s
 gear_diameter = 22.0  # mm
 spring_rate = 0.16
 
-max_angle = 120
-# pwm_range = (500, 2400)
-pwm_range = (900, 2100)
+max_angle = 180
+pwm_range = (500, 2400)
+# pwm_range = (900, 2100)
 
 maxStaticFriction = 0.8
 dynamicFriction = 0.4
