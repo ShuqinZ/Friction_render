@@ -44,6 +44,10 @@ for _ in range(num_steps):
     angle_sequence.append(next_angle)
     current_angle = next_angle
 
+positions = []
+velocities = []
+angle_deltas = []
+
 # Warm up
 servo.set(start_angle, angle_range=max_angle, pulse_range=pwm_range)
 time.sleep(1.0)
