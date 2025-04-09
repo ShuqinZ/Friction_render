@@ -1,3 +1,4 @@
+import os
 import time
 import board
 import busio
@@ -174,6 +175,7 @@ try:
             except:
                 pass
 
+        os.makedirs("logs", exist_ok=True)
         with open("logs/force_error_log.csv", "w", newline="") as f:
             writer = csv.writer(f)
             writer.writerow(["time_s", "error_percent"])
