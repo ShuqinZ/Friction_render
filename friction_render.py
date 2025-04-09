@@ -44,7 +44,7 @@ initTime = 1.0  # seconds
 Kp, Ki, Kd = 0.8, 0, 0.05
 alpha = 0.7  # smoothing factor for low-pass filter
 pot_fluc = 0.012
-high_pass_alpha = 0.8
+high_pass_alpha = 0.9
 
 try:
     # while True:
@@ -148,7 +148,7 @@ try:
             previous_error = error
 
             positionChange = high_pass_alpha * (positionChange + targetPosition - lastTargetPosition)
-            pid_scale_factor = 1 + np.tanh(abs(positionChange)) if abs(positionChange) > 0.2 else 1
+            pid_scale_factor = 1 + np.tanh(abs(positionChange) * 2) if abs(positionChange) > 0.2 else 1
 
             error_percent = 100 * (detectedForce - frictionForce) / frictionForce if frictionForce > 0 else 0
 
