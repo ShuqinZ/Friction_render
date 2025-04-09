@@ -20,8 +20,10 @@ pot = AnalogIn(ads, ADS.P0)
 servo = pi5RC(18)  # GPIO18 with working PWM2 on pwmchip2
 # static_model = joblib.load('assets/servo_speed_static.pkl')
 # continues_model = joblib.load('assets/servo_speed_continues.pkl')
+
+affective_history = 7
 model_coeffs = np.load("assets/servo_model_coeffs.npy")
-model_coeffs = model_coeffs[:4]
+model_coeffs = model_coeffs[:affective_history]
 
 
 # === Constants ===
@@ -60,7 +62,7 @@ try:
         cold_start = True
         pid_scale_factor = 1
 
-        motorVelocity_history = [0 for i in range(4)]
+        motorVelocity_history = [0 for _ in range(affective_history)]
 
         log_list = []
 
