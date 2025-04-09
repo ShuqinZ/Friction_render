@@ -149,8 +149,9 @@ try:
 
             positionChange = high_pass_alpha * (positionChange + targetPosition - lastTargetPosition)
 
-            baseScale = 2 if sliding else 1
-            pid_scale_factor = baseScale + np.tanh(abs(positionChange)) * 4 if abs(positionChange) > 0.2 else 1
+            if calibrated and sliding:
+                baseScale = 2
+                pid_scale_factor = baseScale + np.tanh(abs(positionChange)) * 4 if abs(positionChange) > 0.2 else 1
 
             error_percent = 100 * (detectedForce - frictionForce) / frictionForce if frictionForce > 0 else 0
 
