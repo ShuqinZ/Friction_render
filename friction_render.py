@@ -64,6 +64,7 @@ try:
         last_angle_change = 0
         cold_start = True
         pid_scale_factor = 1
+        external_velocity = 0
 
         motorVelocity_history = [0 for _ in range(affective_history)]
 
@@ -124,6 +125,8 @@ try:
                 targetPosition = frictionForce / spring_rate - 1
 
             # === PID ===
+            if calibrated and external_velocity > delta_v:
+                targetPosition += external_velocity * dt
             velocity = (smoothedPosition - lastSmoothedPosition) / dt
             error = targetPosition - smoothedPosition
             integral += error * dt
