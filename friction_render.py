@@ -54,7 +54,7 @@ try:
         cold_start = True
         pid_scale_factor = 1
 
-        motorVelocity_history = [0 for i in range(10)]
+        motorVelocity_history = [0 for i in range(4)]
 
         servo.set(0, angle_range=max_angle, pulse_range=pwm_range)
         time.sleep(1)
