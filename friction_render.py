@@ -62,8 +62,7 @@ try:
 
         motorVelocity_history = [0 for i in range(4)]
 
-        error_percent_list = []
-        time_list = []
+        log_list = []
 
         servo.set(0, angle_range=max_angle, pulse_range=pwm_range)
         time.sleep(1)
@@ -167,8 +166,7 @@ try:
             servoBaseAngle = controlAngle
             lastSmoothedPosition = smoothedPosition
 
-            error_percent_list.append(error_percent)
-            time_list.append(now - start_time)
+            log_list.append([now-start_time, velocity, frictionForce, detectedForce, error_percent])
 
             try:
                 time.sleep(0.02 - (time.time() - last_time))  # 10ms loop (100Hz)
@@ -176,11 +174,11 @@ try:
                 pass
 
         os.makedirs("logs", exist_ok=True)
-        with open("logs/force_error_log.csv", "w", newline="") as f:
+        with open("logs/force_error_log_h.csv", "w", newline="") as f:
             writer = csv.writer(f)
-            writer.writerow(["time_s", "error_percent"])
-            for t, e in zip(time_list, error_percent_list):
-                writer.writerow([t, e])
+            writer.writerow(["Time (s)", "Velocity", "Desired force", "Rendered Force", "Percentage of Error"])
+            for t, v, ff, rf, e in log_list:
+                writer.writerow([t, v, ff, rf, e])
 
         print("Saved error log to logs/force_error_log_h.csv")
 
