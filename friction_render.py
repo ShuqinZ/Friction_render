@@ -42,7 +42,7 @@ dynamicFriction = 0.4
 delta_v = 0.2  # mm/s
 initTime = 1.0  # seconds
 Kp, Ki, Kd = 1, 0, 0.1
-alpha = 0.3  # smoothing factor for low-pass filter
+alpha = 0.7  # smoothing factor for low-pass filter
 pot_fluc = 0.012
 
 try:
