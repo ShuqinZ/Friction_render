@@ -39,7 +39,7 @@ pwm_range = (500, 2400)
 
 maxStaticFriction = 0.8
 dynamicFriction = 0.4
-delta_v = 0.1  # mm/s
+delta_v = 0.2  # mm/s
 initTime = 1.0  # seconds
 Kp, Ki, Kd = 0.8, 0, 0.05
 alpha = 0.7  # smoothing factor for low-pass filter
@@ -154,7 +154,7 @@ try:
 
             print(f"{error:.2f}, {derivative:.2f}, {controlSignal:.2f}, {controlAngle:.2f}, {targetPosition:.2f}, {smoothedPosition:.2f}, {velocity:.3f}, {motorVelocity:.3f},{external_velocity:.3f}, {frictionForce:.2f}, {detectedForce:.2f}, {error_percent:.2f}%, {dt:.5f}")
 
-            if calibrated and not sliding and external_velocity > delta_v and smoothedPosition > (maxStaticFriction/spring_rate + spring_rate * pot_fluc) * 1.05:
+            if calibrated and not sliding and velocity + motorVelocity > delta_v and smoothedPosition > (maxStaticFriction/spring_rate + spring_rate * pot_fluc) * 1.05:
                 sliding = True
 
             elif calibrated and sliding and velocity < 0 and motorVelocity > velocity + 10:
