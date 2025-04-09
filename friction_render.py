@@ -8,6 +8,9 @@ import joblib
 
 from utils.pi5RC import pi5RC
 from utils.tools import *
+import csv
+
+
 
 # === Hardware Setup ===
 i2c = busio.I2C(board.SCL, board.SDA)
@@ -40,7 +43,9 @@ alpha = 0.3  # smoothing factor for low-pass filter
 pot_fluc = 0.012
 
 try:
-    while True:
+    # while True:
+    for i in range(1):
+
         # === State Variables ===
         lastSmoothedPosition = None  # to be initialized with first reading
         integral = 0
@@ -55,6 +60,9 @@ try:
         pid_scale_factor = 1
 
         motorVelocity_history = [0 for i in range(4)]
+
+        error_percent_list = []
+        time_list = []
 
         servo.set(0, angle_range=max_angle, pulse_range=pwm_range)
         time.sleep(1)
@@ -133,7 +141,9 @@ try:
 
             pid_scale_factor = 1 + (min(external_velocity, 50)-3)/50 if external_velocity > delta_v and calibrated and sliding else 1
 
-            print(f"{error:.2f}, {controlSignal:.2f}, {controlAngle:.2f}, {targetPosition:.2f}, {smoothedPosition:.2f}, {velocity:.3f}, {motorVelocity:.3f},{external_velocity:.3f}, {frictionForce:.2f}, {detectedForce:.2f}, {100 * (detectedForce - frictionForce) / frictionForce if frictionForce > 0 else 0:.2f}%, {dt:.5f}")
+            error_percent = 100 * (detectedForce - frictionForce) / frictionForce if frictionForce > 0 else 0
+
+            print(f"{error:.2f}, {controlSignal:.2f}, {controlAngle:.2f}, {targetPosition:.2f}, {smoothedPosition:.2f}, {velocity:.3f}, {motorVelocity:.3f},{external_velocity:.3f}, {frictionForce:.2f}, {detectedForce:.2f}, {error_percent:.2f}%, {dt:.5f}")
 
             if calibrated and not sliding and external_velocity > delta_v and smoothedPosition > (maxStaticFriction/spring_rate + spring_rate * pot_fluc) * 1.05:
                 sliding = True
@@ -156,10 +166,22 @@ try:
             servoBaseAngle = controlAngle
             lastSmoothedPosition = smoothedPosition
 
+            error_percent_list.append(error_percent)
+            time_list.append(now - start_time)
+
             try:
                 time.sleep(0.02 - (time.time() - last_time))  # 10ms loop (100Hz)
             except:
                 pass
+
+        with open("logs/force_error_log.csv", "w", newline="") as f:
+            writer = csv.writer(f)
+            writer.writerow(["time_s", "error_percent"])
+            for t, e in zip(time_list, error_percent_list):
+                writer.writerow([t, e])
+
+        print("Saved error log to logs/force_error_log_h.csv")
+
 
 except KeyboardInterrupt:
     print("\nExiting...")
