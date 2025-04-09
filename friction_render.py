@@ -16,7 +16,7 @@ pot = AnalogIn(ads, ADS.P0)
 servo = pi5RC(18)  # GPIO18 with working PWM2 on pwmchip2
 static_model = joblib.load('assets/servo_speed_static.pkl')
 continues_model = joblib.load('assets/servo_speed_continues.pkl')
-model_coeffs = np.load("servo_model_coeffs.npy")
+model_coeffs = np.load("assets/servo_model_coeffs.npy")
 model_coeffs = model_coeffs[:4]
 
 
