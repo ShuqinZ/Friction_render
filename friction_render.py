@@ -44,7 +44,7 @@ initTime = 1.0  # seconds
 Kp, Ki, Kd = 0.8, 0, 0.05
 alpha = 0.7  # smoothing factor for low-pass filter
 pot_fluc = 0.012
-high_pass_alpha = 0.9
+high_pass_alpha = 0.99
 
 try:
     # while True:
