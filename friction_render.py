@@ -17,6 +17,8 @@ servo = pi5RC(18)  # GPIO18 with working PWM2 on pwmchip2
 static_model = joblib.load('assets/servo_speed_static.pkl')
 continues_model = joblib.load('assets/servo_speed_continues.pkl')
 model_coeffs = np.load("servo_model_coeffs.npy")
+model_coeffs = model_coeffs[:4]
+
 
 # === Constants ===
 # angle_to_distance = -0.21  # mm per degree
@@ -136,7 +138,7 @@ try:
             if calibrated and not sliding and external_velocity > delta_v and smoothedPosition > (maxStaticFriction/spring_rate + spring_rate * pot_fluc) * 1.05:
                 sliding = True
 
-            elif calibrated and sliding and velocity < 0 and motorVelocity > -1e-6:
+            elif calibrated and sliding and velocity < 0 and motorVelocity > velocity:
                 time.sleep(2)
                 break
 
