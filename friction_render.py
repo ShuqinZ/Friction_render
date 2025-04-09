@@ -126,7 +126,7 @@ try:
 
             # === PID ===
             if calibrated and external_velocity > delta_v:
-                targetPosition += external_velocity * dt
+                targetPosition -= external_velocity * dt
             velocity = (smoothedPosition - lastSmoothedPosition) / dt
             error = targetPosition - smoothedPosition
             integral += error * dt
