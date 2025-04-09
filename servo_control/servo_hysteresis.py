@@ -116,7 +116,7 @@ plt.ylabel("Influence on Velocity")
 plt.title("Influence of Past Commands on Current Velocity")
 plt.grid(True)
 plt.tight_layout()
-plt.savefig("servo_hysteresis.ong", dpi=300)
+plt.savefig("servo_hysteresis.png", dpi=300)
 
 # === Cleanup ===
 del servo
