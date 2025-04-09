@@ -24,10 +24,10 @@ pot = AnalogIn(ads, ADS.P0)
 servo = pi5RC(18)
 
 alpha = 0.3
-max_angle = 120
-pwm_range = (900, 2100)
+max_angle = 180
+pwm_range = (500, 2400)
 timestep = 0.2
-start_angle = 20
+start_angle = 35
 num_steps = 200
 max_history = 10  # Number of past commands to analyze
 
@@ -91,7 +91,7 @@ y = np.array(y)
 model = LinearRegression()
 model.fit(X, y)
 coeffs = model.coef_
-np.save("servo_model_coeffs.npy", model.coef_)
+np.save("../assets/servo_model_coeffs.npy", model.coef_)
 
 print("\n=== Hysteresis Analysis ===")
 for i, coef in enumerate(coeffs):
@@ -114,7 +114,7 @@ plt.bar(range(max_history), coeffs)
 plt.xlabel("Command Steps Ago (t - k)")
 plt.ylabel("Influence on Velocity")
 plt.title("Influence of Past Commands on Current Velocity")
-plt.grid(True)
+# plt.grid(True)
 plt.tight_layout()
 plt.savefig("servo_hysteresis.png", dpi=300)
 

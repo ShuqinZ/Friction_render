@@ -36,12 +36,13 @@ def get_linear_speed(command_angle):
 
 
 # Plot the fit
+
+plt.figure(figsize=(8, 5))
 plt.scatter(X, y, label='Data')
 plt.plot(X, model.predict(X), color='red', label='Linear Fit')
 plt.xlabel('Command Angle Change')
 plt.ylabel('Linear Speed')
 plt.title('Servo Angle to Linear Speed Calibration')
 plt.legend()
-plt.grid(True)
-plt.show()
-
+# plt.grid(True)
+plt.savefig("servo_linear_speed.png", dpi=300)
