@@ -44,6 +44,7 @@ initTime = 1.0  # seconds
 Kp, Ki, Kd = 1, 0, 0.1
 alpha = 0.7  # smoothing factor for low-pass filter
 pot_fluc = 0.012
+high_pass_alpha = 0.5
 
 try:
     # while True:
@@ -59,6 +60,7 @@ try:
         sliding = False
         lastTargetPosition = 0
         targetPosition = 0
+        positionChange = 0
         last_angle_change = 0
         cold_start = True
         pid_scale_factor = 1
@@ -142,7 +144,8 @@ try:
             external_velocity = velocity - motorVelocity
             previous_error = error
 
-            pid_scale_factor = 1 + np.tanh(abs(external_velocity)) if abs(external_velocity) > delta_v else 1
+            positionChange = high_pass_alpha * (positionChange + targetPosition - lastTargetPosition)
+            pid_scale_factor = 1 + np.tanh(abs(positionChange)) if abs(positionChange) > 0.2 else 1
 
             error_percent = 100 * (detectedForce - frictionForce) / frictionForce if frictionForce > 0 else 0
 
