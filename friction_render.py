@@ -57,6 +57,7 @@ try:
         detectedForce = 0
         calibrated = False
         sliding = False
+        lastTargetPosition = 0
         targetPosition = 0
         last_angle_change = 0
         cold_start = True
@@ -141,7 +142,7 @@ try:
             external_velocity = velocity - motorVelocity
             previous_error = error
 
-            pid_scale_factor = 1 + np.tanh(abs(error) / 5) if abs(error) > 0.5 else 1
+            pid_scale_factor = 1 + np.tanh(abs(targetPosition - lastTargetPosition) / 5) if abs(targetPosition - lastTargetPosition) > 0.5 else 1
 
             error_percent = 100 * (detectedForce - frictionForce) / frictionForce if frictionForce > 0 else 0
 
@@ -167,6 +168,7 @@ try:
 
             servoBaseAngle = controlAngle
             lastSmoothedPosition = smoothedPosition
+            lastTargetPosition = targetPosition
 
             log_list.append([now-start_time, velocity, frictionForce, detectedForce, error_percent])
 
@@ -183,6 +185,9 @@ try:
                 writer.writerow([t, v, ff, rf, e])
 
         print("Saved error log to logs/force_error_log_h.csv")
+        servo.set(100, angle_range=max_angle, pulse_range=pwm_range)
+        time.sleep(1)
+        del servo
 
 
 except KeyboardInterrupt:
