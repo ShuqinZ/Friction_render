@@ -199,8 +199,8 @@ try:
         with open("logs/force_error_log_h_final_1.csv", "w", newline="") as f:
             writer = csv.writer(f)
             writer.writerow(["Time (s)", "Velocity", "Desired force", "Rendered Force", "Percentage of Error"])
-            for t, v, ff, rf, e in log_list:
-                writer.writerow([t, v, ff, rf, e])
+            for t, v, ev, ff, rf, e in log_list:
+                writer.writerow([t, v, ev, ff, rf, e])
 
         print("Saved error log to logs/force_error_log_h.csv")
         servo.set(80, angle_range=max_angle, pulse_range=pwm_range)
