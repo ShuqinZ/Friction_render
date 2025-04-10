@@ -44,7 +44,7 @@ initTime = 1.0  # seconds
 Kp, Ki, Kd = 0.8, 0, 0.05
 alpha = 0.7  # smoothing factor for low-pass filter
 pot_fluc = 0.012
-high_pass_alpha = 0.4
+high_pass_alpha = 0.6
 
 try:
     # while True:
@@ -125,8 +125,11 @@ try:
                 targetPosition = frictionForce / spring_rate - 1
 
             # === PID ===
-            if calibrated and sliding:
-                targetPosition -= external_velocity * 1.5 * dt
+            if calibrated:
+                if velocity - motorVelocity > delta_v:
+                    targetPosition -= external_velocity * 1.2 * dt
+                if sliding:
+                    targetPosition -= external_velocity * 1.5 * dt
             velocity = (smoothedPosition - lastSmoothedPosition) / dt
             error = targetPosition - smoothedPosition
             integral += error * dt
