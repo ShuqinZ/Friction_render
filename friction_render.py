@@ -125,9 +125,23 @@ try:
                 targetPosition = frictionForce / spring_rate - 1
 
             # === PID ===
+
+
+
+            velocity = (smoothedPosition - lastSmoothedPosition) / dt
+
+            motorVelocity = np.dot(model_coeffs, motorVelocity_history[::-1])
+
+            if calibrated and not sliding and velocity - motorVelocity > delta_v and smoothedPosition > (maxStaticFriction/spring_rate):
+                sliding = True
+
+            elif calibrated and sliding and velocity < 0 and motorVelocity > velocity + 5:
+                time.sleep(2)
+                break
+
             if calibrated and external_velocity > delta_v:
                 targetPosition -= external_velocity * 1.5 * dt
-            velocity = (smoothedPosition - lastSmoothedPosition) / dt
+
             error = targetPosition - smoothedPosition
             integral += error * dt
             derivative = (error - previous_error) / dt if dt > 0 else 0
@@ -142,7 +156,6 @@ try:
             #     motorVelocity = np.sign(last_angle_change) * min(static_model.predict([[abs(last_angle_change)]])[0], 0)
             # else:
             #     motorVelocity = np.sign(last_angle_change) * min(continues_model.predict([[abs(last_angle_change)]])[0], 0)
-            motorVelocity = np.dot(model_coeffs, motorVelocity_history[::-1])
 
             external_velocity = velocity - motorVelocity
             previous_error = error
@@ -162,13 +175,6 @@ try:
             error_percent = 100 * (detectedForce - frictionForce) / frictionForce if frictionForce > 0 else 0
 
             print(f"{error:.2f}, {derivative:.2f}, {controlSignal:.2f}, {controlAngle:.2f}, {targetPosition:.2f}, {smoothedPosition:.2f}, {velocity:.3f}, {motorVelocity:.3f},{external_velocity:.3f}, {frictionForce:.2f}, {detectedForce:.2f}, {error_percent:.2f}%, {dt:.5f}")
-
-            if calibrated and not sliding and velocity - motorVelocity > delta_v and smoothedPosition > (maxStaticFriction/spring_rate):
-                sliding = True
-
-            elif calibrated and sliding and velocity < 0 and motorVelocity > velocity + 5:
-                time.sleep(2)
-                break
 
             angle_change = controlAngle - servoBaseAngle
             # if angle_change * last_angle_change > 0:
