@@ -129,7 +129,7 @@ try:
                 # if velocity - motorVelocity > delta_v:
                 targetPosition -= external_velocity * 1.2 * dt
                 if sliding:
-                    targetPosition -= external_velocity * 1.5 * dt
+                    targetPosition -= external_velocity * 1.8 * dt
             velocity = (smoothedPosition - lastSmoothedPosition) / dt
             error = targetPosition - smoothedPosition
             integral += error * dt
@@ -156,7 +156,7 @@ try:
             pid_scale_factor = 1
             if calibrated:
                 if sliding:
-                    pid_enhance = pid_enhance + max(np.tanh(abs(positionChange)), 0.22)
+                    pid_enhance = pid_enhance + max(np.tanh(abs(positionChange)), 0.2)
                 if external_velocity > delta_v:
                     pid_enhance = pid_enhance + np.tanh(abs(external_velocity/50))
 
