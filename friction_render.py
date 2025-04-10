@@ -126,8 +126,8 @@ try:
 
             # === PID ===
             if calibrated:
-                if velocity - motorVelocity > delta_v:
-                    targetPosition -= external_velocity * 1.2 * dt
+                # if velocity - motorVelocity > delta_v:
+                targetPosition -= external_velocity * 1.2 * dt
                 if sliding:
                     targetPosition -= external_velocity * 1.5 * dt
             velocity = (smoothedPosition - lastSmoothedPosition) / dt
