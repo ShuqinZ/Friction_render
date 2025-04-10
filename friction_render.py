@@ -149,12 +149,14 @@ try:
 
             positionChange = high_pass_alpha * (positionChange + targetPosition - lastTargetPosition)
 
+            pid_enhance = 0
+            pid_scale_factor = 1
             if calibrated and sliding:
-                pid_scale_factor = 1.2 + np.tanh(abs(positionChange))
-            elif external_velocity > delta_v:
-                pid_scale_factor = 1.2 + np.tanh(abs(external_velocity))
-            else:
-                pid_scale_factor = 1
+                pid_enhance = pid_enhance + 0.2 + np.tanh(abs(positionChange))
+            if external_velocity > delta_v:
+                pid_enhance = pid_enhance + 1 + np.tanh(abs(external_velocity))
+
+            pid_scale_factor += pid_enhance
 
             error_percent = 100 * (detectedForce - frictionForce) / frictionForce if frictionForce > 0 else 0
 
