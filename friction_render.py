@@ -158,7 +158,7 @@ try:
                 if sliding:
                     pid_enhance = pid_enhance + min(np.tanh(abs(positionChange)), 0.2)
                 if external_velocity > delta_v:
-                    pid_enhance = pid_enhance + np.tanh(abs(external_velocity/30))
+                    pid_enhance = pid_enhance + np.tanh(abs(external_velocity/50))
 
             pid_scale_factor += pid_enhance
 
