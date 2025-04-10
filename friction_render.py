@@ -166,7 +166,7 @@ try:
             if calibrated and not sliding and velocity - motorVelocity > delta_v and smoothedPosition > (maxStaticFriction/spring_rate):
                 sliding = True
 
-            elif calibrated and sliding and velocity < 0 and motorVelocity > velocity + 10:
+            elif calibrated and sliding and velocity < 0 and motorVelocity > velocity + 5:
                 time.sleep(2)
                 break
 
