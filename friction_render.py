@@ -188,7 +188,7 @@ try:
             lastSmoothedPosition = smoothedPosition
             lastTargetPosition = targetPosition
 
-            log_list.append([now-start_time, velocity, external_velocity, frictionForce, detectedForce, error_percent])
+            log_list.append([now-start_time, velocity, velocity + motorVelocity, frictionForce, detectedForce, error_percent])
 
             try:
                 time.sleep(0.02 - (time.time() - last_time))  # 10ms loop (100Hz)
@@ -198,9 +198,9 @@ try:
         os.makedirs("logs", exist_ok=True)
         with open("logs/force_error_log_h.csv", "w", newline="") as f:
             writer = csv.writer(f)
-            writer.writerow(["Time (s)", "Velocity", "Desired force", "Rendered Force", "Percentage of Error"])
-            for t, v, ev, ff, rf, e in log_list:
-                writer.writerow([t, v, ev, ff, rf, e])
+            writer.writerow(["Time (s)", "Velocity", "Handler Velocity", "Desired force", "Rendered Force", "Percentage of Error"])
+            for t, v, hv, ff, rf, e in log_list:
+                writer.writerow([t, v, hv, ff, rf, e])
 
         print("Saved error log to logs/force_error_log_h.csv")
         servo.set(80, angle_range=max_angle, pulse_range=pwm_range)
