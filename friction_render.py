@@ -126,7 +126,7 @@ try:
 
             # === PID ===
             if calibrated and external_velocity > delta_v:
-                targetPosition -= external_velocity * 1.2 * dt
+                targetPosition -= external_velocity * 2 * dt
             velocity = (smoothedPosition - lastSmoothedPosition) / dt
             error = targetPosition - smoothedPosition
             integral += error * dt
@@ -200,7 +200,7 @@ try:
                 writer.writerow([t, v, ff, rf, e])
 
         print("Saved error log to logs/force_error_log_h.csv")
-        servo.set(20, angle_range=max_angle, pulse_range=pwm_range)
+        servo.set(80, angle_range=max_angle, pulse_range=pwm_range)
         time.sleep(1)
         del servo
 
