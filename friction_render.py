@@ -134,7 +134,7 @@ try:
             error = targetPosition - smoothedPosition
             integral += error * dt
             derivative = (error - previous_error) / dt if dt > 0 else 0
-            controlSignal = -(Kp * error + Ki * integral + Kd * derivative) * pid_scale_factor
+            controlSignal = -(Kp * error * pid_scale_factor + Ki * integral + Kd * derivative)
             controlAngle = np.clip(servoBaseAngle + controlSignal, 0, max_angle)
 
             servo.set(controlAngle, angle_range=max_angle, pulse_range=pwm_range)
