@@ -44,7 +44,7 @@ initTime = 1.0  # seconds
 Kp, Ki, Kd = 0.8, 0, 0.05
 alpha = 0.7  # smoothing factor for low-pass filter
 pot_fluc = 0.012
-high_pass_alpha = 0.3
+high_pass_alpha = 0.25
 
 try:
     # while True:
@@ -153,9 +153,9 @@ try:
             pid_scale_factor = 1
             if calibrated:
                 if sliding:
-                    pid_enhance = pid_enhance + 0.4 + np.tanh(abs(positionChange))
+                    pid_enhance = pid_enhance + 0.5 + np.tanh(abs(positionChange))
                 if external_velocity > delta_v:
-                    pid_enhance = pid_enhance + 0.2 + np.tanh(abs(external_velocity))
+                    pid_enhance = pid_enhance + 0.3 + np.tanh(abs(external_velocity))
 
             pid_scale_factor += pid_enhance
 
