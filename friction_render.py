@@ -41,7 +41,7 @@ maxStaticFriction = 0.8
 dynamicFriction = 0.4
 delta_v = 0.2  # mm/s
 initTime = 1.0  # seconds
-Kp, Ki, Kd = 0.8, 0, 0.05
+Kp, Ki, Kd = 0.8, 0, 0.02
 alpha = 0.7  # smoothing factor for low-pass filter
 pot_fluc = 0.012
 high_pass_alpha = 0.3
@@ -196,7 +196,7 @@ try:
                 pass
 
         os.makedirs("logs", exist_ok=True)
-        with open("logs/force_error_log_h.csv", "w", newline="") as f:
+        with open("logs/force_error_log_h_final.csv", "w", newline="") as f:
             writer = csv.writer(f)
             writer.writerow(["Time (s)", "Velocity", "Desired force", "Rendered Force", "Percentage of Error"])
             for t, v, ff, rf, e in log_list:
