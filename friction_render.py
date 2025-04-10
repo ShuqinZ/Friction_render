@@ -199,13 +199,13 @@ try:
                 writer.writerow([t, v, ff, rf, e])
 
         print("Saved error log to logs/force_error_log_h.csv")
-        servo.set(100, angle_range=max_angle, pulse_range=pwm_range)
+        servo.set(20, angle_range=max_angle, pulse_range=pwm_range)
         time.sleep(1)
         del servo
 
 
 except KeyboardInterrupt:
     print("\nExiting...")
-    servo.set(100, angle_range=max_angle, pulse_range=pwm_range)
+    servo.set(20, angle_range=max_angle, pulse_range=pwm_range)
     time.sleep(1)
     del servo
