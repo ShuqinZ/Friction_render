@@ -103,13 +103,13 @@ try:
                 frictionForce = 0
                 if smoothedPosition > (1.1 + 4):
                     targetPosition = smoothedPosition - 2
-                elif smoothedPosition > (maxStaticFriction / spring_rate + 1):
+                elif smoothedPosition > (maxStaticFriction / spring_rate - 1 + 1):
                     targetPosition = smoothedPosition - 0.3
-                elif smoothedPosition > (maxStaticFriction / spring_rate + 0.1):
+                elif smoothedPosition > (maxStaticFriction / spring_rate - 1 + 0.1):
                     targetPosition = smoothedPosition - 0.1
-                elif smoothedPosition > (maxStaticFriction / spring_rate + 0.02):
+                elif smoothedPosition > (maxStaticFriction / spring_rate - 1 + 0.02):
                     targetPosition = smoothedPosition - 0.01
-                elif smoothedPosition <= (maxStaticFriction / spring_rate + 0.01):
+                elif smoothedPosition <= (maxStaticFriction / spring_rate - 1 + 0.01):
                     calibrated = True
                     integral = 0
 
