@@ -125,7 +125,7 @@ try:
                 targetPosition = frictionForce / spring_rate - 1
 
             # === PID ===
-            if calibrated:
+            if calibrated and external_velocity > 0:
                 # if velocity - motorVelocity > delta_v:
                 targetPosition -= external_velocity * 1.2 * dt
                 if sliding:
