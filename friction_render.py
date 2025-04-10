@@ -126,7 +126,7 @@ try:
 
             # === PID ===
             if calibrated and sliding:
-                targetPosition -= external_velocity * 1.2 * dt
+                targetPosition -= external_velocity * 1.5 * dt
             velocity = (smoothedPosition - lastSmoothedPosition) / dt
             error = targetPosition - smoothedPosition
             integral += error * dt
@@ -155,7 +155,7 @@ try:
                 if sliding:
                     pid_enhance = pid_enhance + np.tanh(abs(positionChange))
                 if external_velocity > delta_v:
-                    pid_enhance = pid_enhance + 0.2 + np.tanh(abs(external_velocity/10))
+                    pid_enhance = pid_enhance + np.tanh(abs(external_velocity/50))
 
             pid_scale_factor += pid_enhance
 
