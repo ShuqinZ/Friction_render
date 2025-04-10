@@ -129,7 +129,7 @@ try:
                 # if velocity - motorVelocity > delta_v:
                 targetPosition -= external_velocity * 1.2 * dt
                 if sliding:
-                    targetPosition -= external_velocity * external_velocity/30 * dt
+                    targetPosition -= external_velocity * max(external_velocity/100, 2) * dt
             velocity = (smoothedPosition - lastSmoothedPosition) / dt
             error = targetPosition - smoothedPosition
             integral += error * dt
