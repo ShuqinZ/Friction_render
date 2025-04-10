@@ -163,7 +163,7 @@ try:
 
             print(f"{error:.2f}, {derivative:.2f}, {controlSignal:.2f}, {controlAngle:.2f}, {targetPosition:.2f}, {smoothedPosition:.2f}, {velocity:.3f}, {motorVelocity:.3f},{external_velocity:.3f}, {frictionForce:.2f}, {detectedForce:.2f}, {error_percent:.2f}%, {dt:.5f}")
 
-            if calibrated and not sliding and velocity - motorVelocity > delta_v and smoothedPosition > (maxStaticFriction/spring_rate + spring_rate * pot_fluc) * 1.05:
+            if calibrated and not sliding and velocity - motorVelocity > delta_v and smoothedPosition > (maxStaticFriction/spring_rate):
                 sliding = True
 
             elif calibrated and sliding and velocity < 0 and motorVelocity > velocity + 10:
