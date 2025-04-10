@@ -44,7 +44,7 @@ initTime = 1.0  # seconds
 Kp, Ki, Kd = 0.8, 0, 0.02
 alpha = 0.7  # smoothing factor for low-pass filter
 pot_fluc = 0.012
-high_pass_alpha = 0.25
+high_pass_alpha = 0.3
 
 try:
     # while True:
@@ -129,7 +129,7 @@ try:
                 # if velocity - motorVelocity > delta_v:
                 targetPosition -= external_velocity * 1.2 * dt
                 if sliding:
-                    targetPosition -= external_velocity * 2 * dt
+                    targetPosition -= external_velocity * external_velocity/10 * dt
             velocity = (smoothedPosition - lastSmoothedPosition) / dt
             error = targetPosition - smoothedPosition
             integral += error * dt
@@ -156,7 +156,7 @@ try:
             pid_scale_factor = 1
             if calibrated:
                 if sliding:
-                    pid_enhance = pid_enhance + max(np.tanh(abs(positionChange)), 0.2)
+                    pid_enhance = pid_enhance + max(np.tanh(abs(positionChange)), 0.1)
                 if external_velocity > delta_v:
                     pid_enhance = pid_enhance + np.tanh(abs(external_velocity/50))
 
