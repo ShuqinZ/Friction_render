@@ -13,7 +13,7 @@ plt.rcParams.update({
 })
 
 # Load the CSV file
-csv_path = "logs/force_error_log_h_final_4.csv"
+csv_path = "logs/force_error_log_h.csv"
 df = pd.read_csv(csv_path)
 
 # Filter data after 2.8 seconds
@@ -22,7 +22,7 @@ df = df[df["Time (s)"] > 2.8].copy()
 df = df[df["Time (s)"] < 5].copy()
 
 # Reset time to start from zero
-df["Time (s)"] = df["Time (s)"] - 2.8
+df["Time (s)"] = df["Time (s)"] - 2.5
 
 # --- Plot 1: Desired vs Rendered Force ---
 fig1, ax1 = plt.subplots(figsize=(8, 5))
