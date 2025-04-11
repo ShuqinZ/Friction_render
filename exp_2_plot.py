@@ -16,19 +16,23 @@ plt.rcParams.update({
 csv_path = "logs/force_error_log_h.csv"
 df = pd.read_csv(csv_path)
 
-# Filter data after 2.8 seconds
-df = df[df["Time (s)"] > 2.8].copy()
+interaction_time = 0.45
 
-df = df[df["Time (s)"] < 5].copy()
+# Filter data after 2.8 seconds
+df = df[df["Time (s)"] > 2.6].copy()
+
+df = df[df["Time (s)"] < 4.07].copy()
 
 # Reset time to start from zero
-df["Time (s)"] = df["Time (s)"] - 2.5
+df["Time (s)"] = df["Time (s)"] - 2.6
 
 # --- Plot 1: Desired vs Rendered Force ---
 fig1, ax1 = plt.subplots(figsize=(8, 5))
 ax1.plot(df["Time (s)"], df["Desired force"], label="Commanded Friction", linestyle='--')
 
-ax1.axvline(x=0.6, color='gray', linestyle='--', linewidth=1, label="Human Interaction")
+ax1.axvline(x=interaction_time, color='gray', linestyle='--', linewidth=1, label="Human Interaction")
+
+ax1.set_ylim(0, 1)  # Set x-axis limits from 0 to 1
 
 ax1.grid(axis='y', linestyle='--', linewidth=0.5, alpha=0.6)
 ax1.plot(df["Time (s)"], df["Rendered Force"], label="Rendered Force")
@@ -48,7 +52,7 @@ plt.savefig("results/figs/force_plot.png")
 fig2, ax2 = plt.subplots(figsize=(8, 5))
 ax2.plot(df["Time (s)"], df["Percentage of Error"], label="Difference (%)", color='red')
 
-ax2.axvline(x=0.6, color='gray', linestyle='--', linewidth=1, label="Human Interaction")
+ax2.axvline(x=interaction_time, color='gray', linestyle='--', linewidth=1, label="Human Interaction")
 
 ax2.grid(axis='y', linestyle='--', linewidth=0.5, alpha=0.6)
 ax2.set_xlabel("Time (s)")
