@@ -41,7 +41,7 @@ maxStaticFriction = 0.8
 dynamicFriction = 0.4
 delta_v = 0.2  # mm/s
 initTime = 1.0  # seconds
-Kp, Ki, Kd = 0.8, 0, 0.01
+Kp, Ki, Kd = 0.8, 0, 0.02
 alpha = 0.7  # smoothing factor for low-pass filter
 pot_fluc = 0.012
 high_pass_alpha = 0.3
@@ -191,7 +191,7 @@ try:
             log_list.append([now-start_time, velocity, velocity + motorVelocity, frictionForce, detectedForce, error_percent])
 
             try:
-                time.sleep(0.01 - (time.time() - last_time))  # 10ms loop (100Hz)
+                time.sleep(0.02 - (time.time() - last_time))  # 10ms loop (100Hz)
             except:
                 pass
 
