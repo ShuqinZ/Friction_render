@@ -191,7 +191,7 @@ try:
             log_list.append([now-start_time, velocity, velocity + motorVelocity, frictionForce, detectedForce, error_percent])
 
             try:
-                time.sleep(0.02 - (time.time() - last_time))  # 10ms loop (100Hz)
+                time.sleep(0.01 - (time.time() - last_time))  # 10ms loop (100Hz)
             except:
                 pass
 
