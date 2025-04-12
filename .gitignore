@@ -176,4 +176,6 @@ cython_debug/
 tof_calibration/results/*
 .DS_Store
 .idea
-.logs
+
+logs/**
+results/**
