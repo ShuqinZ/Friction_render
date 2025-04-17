@@ -25,8 +25,10 @@ print(f"Running motor at {freq} Hz for {duration} seconds...")
 
 end_time = time.time() + duration
 while time.time() < end_time:
+    print("STEP HIGH")
     lgpio.gpio_write(h, STEP_PIN, 1)
     time.sleep(delay_us / 1_000_000)
+    print("STEP LOW")
     lgpio.gpio_write(h, STEP_PIN, 0)
     time.sleep(delay_us / 1_000_000)
 
