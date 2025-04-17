@@ -24,7 +24,7 @@ delay_us = int(1_000_000 / (freq * 2))  # half-period
 print(f"Running motor at {freq} Hz for {duration} seconds...")
 
 end_time = time.time() + duration
-while time.time() < end_time:
+while 1:
     print("STEP HIGH")
     lgpio.gpio_write(h, STEP_PIN, 1)
     time.sleep(0.5)
