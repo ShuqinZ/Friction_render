@@ -13,7 +13,7 @@ lgpio.gpio_claim_output(h, DIR_PIN, 1)  # Set DIR to HIGH (1)
 lgpio.gpio_claim_output(h, STEP_PIN, 0) # Start STEP at LOW (0)
 
 # Direction: 1 = forward, 0 = reverse
-lgpio.gpio_write(h, DIR_PIN, 0)
+lgpio.gpio_write(h, DIR_PIN, 1)
 
 # Create a pulse waveform for STEP pin
 freq = 100  # step frequency in Hz
